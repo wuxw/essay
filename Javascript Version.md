@@ -1,6 +1,6 @@
 ##[前言]##
 
-这几天上网无意间看到一个新名词：Javascript Harmony。联想到以前的ES 5等，瞬间让我觉得我对javascript的相关版本的概念一直都很模糊。因此决定好好研究下相关的信息。
+这几天上网无意间看到一个新名词：Javascript Harmony。联想到以前的ES 5等，瞬间让我觉得我对javascript的相关版本的概念一直都很模糊。因此决定好好收集整理下相关的信息。
 
 ##[正文]##
 
@@ -8,9 +8,9 @@
 
 一个完整的 JavaScript 实现是由以下 3 个不同部分组成的:
 
-	*	核心（ECMAScript）
-	*	文档对象模型（DOM）
-	*	浏览器对象模型（BOM）
+*	核心（ECMAScript）
+*	文档对象模型（DOM）
+*	浏览器对象模型（BOM）
 
 #### 1.1 ECMAScript ####
 
@@ -38,17 +38,36 @@ DOM（文档对象模型）是 HTML 和 XML 的应用程序接口（API）。DOM
 
 ##### 1.2.1 DOM的不同的部分 #####
 
-*	Core DOM<br /><br />定义了一套标准的针对任何结构化文档的对象<br /><br />
-*	XML DOM<br /><br />定义了一套标准的针对 XML 文档的对象<br /><br />
-*	HTML DOM<br /><br />定义了一套标准的针对 HTML 文档的对象。
+*	Core DOM	
+	
+	定义了一套标准的针对任何结构化文档的对象	
+
+*	XML DOM	
+	
+	定义了一套标准的针对 XML 文档的对象	
+
+*	HTML DOM	
+	
+	定义了一套标准的针对 HTML 文档的对象。
 
 ##### 1.2.2 DOM的各个level #####
 
-*	Level 1
-*	Level 2
-*	Level 3
+*	Level 1	
+	
+	标准分为两部分，Core和HTML。Core定义了用于表示结构化文档的基础接口的同时，也定义了用于表示XML文档的拓展接口。HTML则提供了更为高层的接口，以更加方便处理文档。
 
-其他DOM
+*	Level 2	
+
+	标准分为6个部分：DOM2 Core，Views，Events，Style，Traversal，Range以及DOM2 HTML。	
+
+*	Level 3	
+	
+	标准分为5个部分：DOM3 Core， Load and Save，Validation，Events以及XPath。
+
+更加详细的信息您可以参考[MDN文档](https://developer.mozilla.org/en-US/docs/DOM_Levels)。
+
+##### 1.2.3 其他DOM #####
+
 除了 DOM Core 和 DOM HTML 外，还有其他几种语言发布了自己的 DOM 标准。这些语言都是基于 XML 的，每种 DOM 都给对应语言添加了特有的方法和接口：
 
 
@@ -67,73 +86,11 @@ BOM 主要处理浏览器窗口和框架，不过通常浏览器特定的 JavaSc
 
 ### 2. Javascript的历史 ###
 
-1.	1992年 C--诞生
+图片
 
-	一家称作Nombas的公司开始开发这种语言。这个脚本语言捆绑在一个叫做CEnvi的共享软件产品中，当Netscape Navigator崭露头角时，Nombas开发了一个可以嵌入网页中的CEnvi的版本。现在一般将这些早期的试验称为EspressoPage（浓咖啡般的页面），它们代表了第一个在万维网上使用的客户端脚本语言。不过[周爱民](http://blog.csdn.net/aimingoo/)[考证](http://blog.csdn.net/aimingoo/article/details/1932315)之后，认为第一个在万维网上使用的客户端脚本语言应该是Javascript而不是Espresso Page。您也可以参考[博客园知识](http://kb.cnblogs.com/page/140723/)库进一步深入。
+目前所有的主流 Web 浏览器都支持 ECMA-262 第三版，即JavaScript 1.5版本，JavaScript 1.6-1.9只是ECMAScript (JavaScript on Gecko)升级至JavaScript 2.0的临时代号。从图中你会发现没有ECMAScript 4th。这是因为在ECMAScript 4th标准的制定过程中，由于关于语言的复杂性出现分歧,第4版本被放弃,其中的部分成为了第5版本及Harmony的基础。
 
-2.	1995年 Netscape Navigator 2.0发布，带来了**Javascript 1.0**，同年，IE 1.0以及2.0发布。
-
-	JavaScript一开始的命名是LiveScript，用于解决简单的处理问题，比如验证客户端表单的正确性。当时大部分因特网用户还仅仅通过28.8 kbit/s的调制解调器连接到网络，仅仅为了简单的表单有效性验证，就要与服务器进行多次地往返交互，这种体验是非常糟糕的。
-	就在 Netscape Navigator 2.0 即将正式发布前，Netscape 将其更名为 JavaScript，目的是为了利用 Java 这个因特网时髦词汇。
-
-3.	1996年 Netscape Navigator 3.0发布，带来了**Javascript 1.1**，此版本有分为「Standard Edition」和「Gold Edition」两个版本。IE 3.0发布。
-
-4.	1997年 **JavaScript 1.1**作为一个草案提交给[欧洲计算机制造商协会](https://zh.wikipedia.org/wiki/Ecma%E5%9B%BD%E9%99%85)（ECMA），与此同时，Netscape Navigator 4.0~4.05发布，带来了**JavaScript 1.2**版。IE 4.0发布。
-
-	由来自 Netscape、Sun、微软、Borland 和其他一些对脚本编程感兴趣的公司的程序员组成的[TC39](http://www.ecma-international.org/memento/TC39.htm)锤炼出了 ECMA-262，该标准定义了名为 ECMAScript 的全新脚本语言。
-
-5.	1998年 Navigator 4.06~4.7发布，JavaScript升级到**JavaScript 1.3**版。
-
-5.	1999年 **ECMAScript 3th**发布，带来了强大的正则表达式，更好的文字处理，新的控制指令，异常处理，错误定义更加明确，输出得格式化等。IE 5.0发布。
-
-6.	2000年 Netscape 6.0发布。IE 5.5发布。带来了JavaScript 1.5版本。
-
-7.	2001年 IE 6.0发布。
-
-8.	2006年 IE 7.0发布。
-
-9.	2009年 IE 8.0发布。
-
-10.	2011年 IE 9.0发布。
-
-<p>
-<table>
-	<caption>JScript与IE对ECMA的支持</caption>
-	<tr><td>语言版本</td><td>浏览器版本</td><td>遵循标准</td></tr>
-	<tr><td>JScript1.0</td><td>Internet Explorer 3.0</td><td>ECMA-262 版本 1</td></tr>
-	<tr><td>JScript3.0</td><td>Internet Explorer 4.0</td><td>ECMA-262 版本 1</td></tr>
-	<tr><td>JScript5.0</td><td>Internet Explorer 5.0</td><td>ECMA-262 版本 1</td></tr>
-	<tr><td>JScript5.5</td><td>Internet Explorer 5.5</td><td>ECMA-262 版本 3</td></tr>
-	<tr><td>JScript5.6</td><td>Internet Explorer 6.0</td><td>ECMA-262 版本 3</td></tr>
-</table>
-<br/>
-<table>
-	<caption>JavaScript与NS对ECMA的支持</caption>
-	<tr><td>语言版本</td><td>浏览器版本</td><td>遵循标准</td></tr>
-	<tr><td>JavaScript1.0</td><td>NetScape 2</td><td>ECMA-262 版本 1</td></tr>
-	<tr><td>JavaScript1.2</td><td>NetScape 4.0~4.05</td><td>ECMA-262 版本 1</td></tr>
-	<tr><td>JavaScript1.3</td><td>NetScape 4.06~4.7</td><td>ECMA-262 版本 1</td></tr>
-	<tr><td>JavaScript1.4</td><td>无（仅服务器端）</td><td>ECMA-262 版本 1</td></tr>
-	<tr><td>JavaScript1.5</td><td>NetScape 6.x与7.x</td><td>ECMA-262 版本 3</td></tr>
-</table>
-</p>
-
-##[名词解释]##
-
-2.Harmony
-
-It's ES6.
-A new code-name for a language which is to come after ES3.1. It will feature many of the things ES4 was trying to accomplish, but may attempt them from different directions and will
-focus much more on incremental, step-wise evolution of the language.
-
-3.ECMAScript 3.1
-
-Aka: ES3.1. A set of small additions to ES3.
-
-4.ECMAScript 4
-
-Aka: ES4, “JavaScript 2?.
-A new language which was to be mostly backwards compatible but add optional (gradual) typing and class-based inheritance. Based loosely on Adobe’s ActionScript 3. This is the language effort which died as a result of Harmony.
+图片
 
 [参考文档]
 
