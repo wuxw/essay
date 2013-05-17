@@ -86,11 +86,19 @@ BOM 主要处理浏览器窗口和框架，不过通常浏览器特定的 JavaSc
 
 ### 2. Javascript的历史 ###
 
-图片
+![各个浏览器的js版本](/home/administrator/Documents/mygit/essay/JsVersion_diff between each browser.png)
 
 目前所有的主流 Web 浏览器都支持 ECMA-262 第三版，即JavaScript 1.5版本，JavaScript 1.6-1.9只是ECMAScript (JavaScript on Gecko)升级至JavaScript 2.0的临时代号。从图中你会发现没有ECMAScript 4th。这是因为在ECMAScript 4th标准的制定过程中，由于关于语言的复杂性出现分歧,第4版本被放弃,其中的部分成为了第5版本及Harmony的基础。
 
-图片
+![ECMAScript各个版本的差异](ECMAScript_diff.png)
+
+### 3. Javascript的未来 ###
+
+#### 3.1 Google Dart ####
+
+官方主页：http://www.dartlang.org/
+
+
 
 [参考文档]
 
