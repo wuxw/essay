@@ -94,9 +94,27 @@ BOM 主要处理浏览器窗口和框架，不过通常浏览器特定的 JavaSc
 
 ### 3. Javascript的未来 ###
 
-#### 3.1 Google Dart ####
+大家都知道JavaScript这门语言在设计上有些地方存在缺陷，比如只有函数级作用域没有块级作用域，比如this绑定的问题，比如一直都让我很困惑的constructor等等。作为一门脚本语言，JavaScript又非常之灵活，你可以随意指定对象实例而不必定义类，大规模程序开发过程中，这一点其实也相当痛苦：难以快速重构和寻找调用点。
+
+其实在我看来JavaScript发展趋势大概有这么两种：
+
+	1.	改良，也就是下一代的ES 6，代号Harmony
+	2.	取代，比如非常流行的CoffeeScript，谷歌主导的Dart，还有微软的TypeScript
+
+#### 3.1 ECMAScript 6 ####
+
+<!-- http://hax.iteye.com/blog/1122103 -->
+
+#### 3.2 CoffeeScript ####
+
+#### 3.3 Google Dart ####
 
 官方主页：http://www.dartlang.org/
+<!-- http://www.guao.hk/posts/google-to-unveil-dart-programming-language.html -->
+
+#### 3.4 TypeScript ####
+
+http://www.typescriptlang.org/
 
 
 
