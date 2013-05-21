@@ -103,7 +103,19 @@ BOM 主要处理浏览器窗口和框架，不过通常浏览器特定的 JavaSc
 
 #### 3.1 ECMAScript 6 ####
 
+在2007年，浏览器市场巨头(Mozilla、Microsoft、Adobe、Google和Opera)之间合作和联合的氛围逐渐瓦解，设计师们提出了一份ES4提案，即ECMAScript标准的第4个版本。这将是JavaScript历史上最重大的标准升级，它为JavaScript引入了一些重要的新功能，例如基于类的继承、名称空间以及迭代器。但是各个厂商关于标准的实现方面出现了严重的分歧，采用该新标准的厂商并不多，因此该标准难以成为一个切实可行的技术标准。
+
+在一个无法使用的标准制定过程中投入太多的精力并没有什么意义，因此第二个工作组随之形成。该工作组首先由Microsoft和Yahoo!组成，他们并行地提出了一个更加现代的ECMAScript标准的修订版，解决了一些迫切的而又不容易引起争论的需求。这个新的标准就是ES3.1(即ECMAScript 3.1版)，随后更名为ES5。
+
+ES5的初衷是成为ES4所定义的标准和ES3中已经实现的标准之间的中间版本。ES5曾经被更多地描述为某种程序错误修正的版本，而不是一个主要的标准升级版本。这两个工作组试图协调各自的努力，以便将ES3.1中的改变推进到ES4中。由于在基本主张上存在差异，两个标准之间的共同点实在太少，很显然这种协调难以取得成功。新标准的制定工作再次陷入停顿状态。然而，Adobe公司在最新的Flash引擎和Flex开发(ActionScript 3)中已经采用了ES4标准。但就目前的状况而言，ES4似乎已经看不到什么未来。最后，两个工作组不得不求同存异而走到一起，以便双方都可以将标准推向前进。人们将这个新的、完全不同的项目称为“ECMAScript Harmony”，它几乎没有保留源自ES4标准的内容。
+
+**Harmony是ES6的代号。**
+
+您可以在MDN上查看[FF对ECMAScript 6的支持情况](https://developer.mozilla.org/en-US/docs/JavaScript/ECMAScript_6_support_in_Mozilla)，另外可以在官方的WIKI上面浏览[ECMAScript 6草案](Ecma-262 Edition 6)
+
 <!-- http://hax.iteye.com/blog/1122103 -->
+<!-- ECMAScript 5 compatibility table -->
+<!-- http://kangax.github.io/es5-compat-table/ -->
 
 #### 3.2 CoffeeScript ####
 
