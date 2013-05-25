@@ -5,7 +5,6 @@
 同时，ECMAScript 5增加了其他许多值得关注的新特性以及API。其中最大的改变就是引入严格模式以及原生JSON支持。
 
 ### 严格模式（Strict Mode） ###
-
 Strict Mode is a new feature in ECMAScript 5 that allows you to place a program, or a function, in a “strict” operating context. This strict context prevents certain actions from being taken and throws more exceptions (generally providing the user with more information and a tapered-down coding experience).
 
 ECMAScript 5的严格模式是一个新特性，这个新特性允许你的代码或者某一个函数运行在一个“严格”的上下文中。严格模式上下文阻止特定的行为并且抛出异常（该模式下一般会反馈给用户更多的异常信息）。
@@ -178,132 +177,166 @@ Finally, a long-standing (and very annoying) bug has been resolved: Cases where 
 
 **with(){}**
 
-with(){} statements are dead when strict mode is enabled – in fact it even appears as a syntax error. While the feature was certainly mis-understood and possibly mis-used I’m not convinced that it’s enough to be stricken from the record.
+with(){} statements are dead when trict mode is enabled – in fact it even appears as a syntax error. While the feature was certainly mis-understood and possibly mis-used I’m not convinced that it’s enough to be stricken from the record.s
+
+严格模式下with语句是无法使用的——它甚至变成错误的语法。
 
 The changes made in ECMAScript 5 strict mode are certainly varied (ranging from imposing stylistic preferences, like removing with statements, to fixing legitimately bad language bugs, like the ability to redefine properties in object literals). It’ll be interesting to see how people begin to adopt these points and how it’ll change JavaScript development.
 
-All that being said, I’m fairly certain that jQuery is ES5-Strict compatible right now. Once an implementation of the language is made available (so that that premise may be tested) I’ll happily switch jQuery over to working exclusively in strict mode.
+ECMAScript 5严格模式带来了很多运行时行为的改变（加强了语言的风格偏好，比如移除with语句；修复遗留的语言层面的陷阱，比如可以在对象直接量里重复定义属性）。观察语言的使用者们如何开始接受这些改变并且这些改变最终如何影响到JavaScript的开发将会是一件非常有趣的事情。
 
-JSON
+### JSON ###
 The second major feature of the language is the addition of native JSON support to the language.
+
+ES 5第二个主要的语言特性就是原生JSON支持。
 
 I’ve been championing this move for a long time and I’m glad to see it finally arrive in a specification.
 
+我非常高兴这一特性终于成为了标准的一部分。
+
 In the meantime PLEASE start migrating your JSON-using applications over to Crockford’s json2.js. It is fully compatible with the ECMAScript 5 specification and gracefully degrades if a native (faster!) implementation exists.
 
-In fact, I just landed a change in jQuery yesterday that utilizes the JSON.parse method if it exists, now that it has been completely specified.
+与此同时，请着手开始把你应用到JSON的程序迁移到[Crockford](http://en.wikipedia.org/wiki/Douglas_Crockford)的[json2.js](https://github.com/douglascrockford/JSON-js)上。json2.js完全支持ES 5的标准并且如果运行时环境原生支持JSON的时候还可以优雅降级。
 
 There are two primary methods for handling JSON: JSON.parse (which converts a JSON string into a JavaScript object) and JSON.stringify (which convert a JavaScript object into a serialized string).
+
+JSON这一对象有两个主要的方法：JSON.parse（把JSON字符串反序列化为JavaScript对象） 和 JSON.stringify（将JavaScript对象序列化成为JSON字符串）。
 
 JSON.parse( text )
 
 Converts a serialized JSON string into a JavaScript object.
 
-var obj = JSON.parse('{"name":"John"}');
-// Prints 'John'
-print( obj.name );
-JSON.parse( text, translate )
+JSON字符串反序列化为JavaScript对象。
+
+	var obj = JSON.parse('{"name":"John"}');
+	// Prints 'John'
+	print( obj.name );
+	JSON.parse( text, translate )
 
 Use a translation function to convert values or remove them entirely.
 
-function translate(key, value) {
-  if ( key === "name" ) {
-    return value + " Resig";
-  }
-}
+这个方法支持传入一个反序列化函数以自定义反序列化或者移除对象属性。
+
+	function translate(key, value) {
+	  if ( key === "name" ) {
+	    return value + " Resig";
+	  }
+	}
  
-var obj = JSON.parse('{"name":"John","last":"Resig"}', translate);
-// Prints 'John Resig'
-print( obj.name );
+	var obj = JSON.parse('{"name":"John","last":"Resig"}', translate);
+	// Prints 'John Resig'
+	print( obj.name );
  
-// Undefined
-print( obj.last );
-JSON.stringify( obj )
+	// Undefined
+	print( obj.last );
+	JSON.stringify( obj )
 
 Convert an object into a serialized JSON string.
 
-var str = JSON.stringify({ name: "John" });
-// Prints {"name":"John"}
-print( str );
-JSON.stringify( obj, ["white", "list"])
+把JavaScript对象序列化成为JSON字符串。
+
+	var str = JSON.stringify({ name: "John" });
+	// Prints {"name":"John"}
+	print( str );
+	JSON.stringify( obj, ["white", "list"])
 
 Serialize only a specific white list of properties.
 
-var list = ["name"];
-var str = JSON.stringify({name: "John", last: "Resig"}, list);
-// Prints {"name":"John"}
-print( str );
-JSON.stringify( obj, translate )
+指定需要进行序列化的对象属性列表进行序列化。
+
+	var list = ["name"];
+	var str = JSON.stringify({name: "John", last: "Resig"}, list);
+	// Prints {"name":"John"}
+	print( str );
+	JSON.stringify( obj, translate )
 
 Serializes the object using a translation function.
 
-function translate(key, value) {
-  if ( key === "name" ) {
-    return value + " Resig";
-  }
-}
+使用自定义的序列化函数序列化对象。
+
+	function translate(key, value) {
+	  if ( key === "name" ) {
+	    return value + " Resig";
+	  }
+	}
  
-var str = JSON.stringify({"name":"John","last":"Resig"}, translate);
-// Prints {"name":"John Resig"}
-print( str );
-JSON.stringify( obj, null, 2 )
+	var str = JSON.stringify({"name":"John","last":"Resig"}, translate);
+	// Prints {"name":"John Resig"}
+	print( str );
+	JSON.stringify( obj, null, 2 )
 
 Adds the specified number of spaces to the output, printing it evenly.
 
-var str = JSON.stringify({ name: "John" }, null, 2);
-// Prints:
-// {
-//   "name": "John"
-// }
-print( str );
-JSON.stringify( obj, null, "\t" )
+添加指定的空格数量作为分隔符到序列化结果上，并且整体打印出来。
+
+	var str = JSON.stringify({ name: "John" }, null, 2);
+	// Prints:
+	// {
+	//   "name": "John"
+	// }
+	print( str );
+	JSON.stringify( obj, null, "\t" )
 
 Uses the specified string to do the spacing.
 
-var str = JSON.stringify({ name: "John" }, null, "\t");
-// Prints:
-// {\n\t"name": "John"\n}
-print( str );
+使用其他的字符串作为分隔符。
+
+	var str = JSON.stringify({ name: "John" }, null, "\t");
+	// Prints:
+	// {\n\t"name": "John"\n}
+	print( str );
+
 Additionally, a few new generic methods have been added to some of the base objects but, frankly, they aren’t that interesting. The results from String, Boolean, and Number are just equivalent to calling .valueOf() and the result from Date is equivalent to calling .toISOString()
 
-// Yawn...
-String.prototype.toJSON
-Boolean.prototype.toJSON
-Number.prototype.toJSON
-Date.prototype.toJSON
-.bind()
+另外还有一些新的方法添加到了语言的基本类型上，不过坦白讲，这些新方法并不是那么有趣。调用String, Boolean, 和 Number对象的valueOf方法可以直接获得对象的原始值，而Date的valueOf则返回和toISOString方法一样的结果。
+
+	// Yawn...
+	String.prototype.toJSON
+	Boolean.prototype.toJSON
+	Number.prototype.toJSON
+	Date.prototype.toJSON
+
+### .bind() ###
 A welcomed addition to the language is a built-in .bind() method for enforcing the context of a function (virtually identical to Prototype’s .bind implementation).
+
+新添加到语言的bind方法会创建一个新函数,称为绑定函数。当调用这个绑定函数时,绑定函数会以创建它时传入bind方法的第一个参数作为this,传入bind方法的第二个以及以后的参数加上绑定函数运行时本身的参数按照顺序作为原函数的参数来调用原函数。
 
 Function.prototype.bind(thisArg, arg1, arg2....)
 
 Enforces the ‘this’ of the specified function to a specific object – and passing in any specified arguments.
 
-var obj = {
-  method: function(name){
-    this.name = name;
-  }
-};
+	var obj = {
+	  method: function(name){
+	    this.name = name;
+	  }
+	};
  
-setTimeout( obj.method.bind(obj, "John"), 100 );
-Considering how long this function (and its equivalents) have been around it’s a welcome addition to the language.
+	setTimeout( obj.method.bind(obj, "John"), 100 );
 
-Date
+### Date ###
 Dates are now capable of both parsing and outputting ISO-formatted dates. Thank goodness, about time. rimshot
+
+现在可以使用ISO时间格式字符串反序列化为Date对象和将Date对象输出为ISO时间格式字符串。
 
 The Date constructor now attempts to parse the date as if it was ISO-formatted, first, then moves on to the other inputs that it accepts.
 
+Date对象构造器首先尝试使用ISO时间格式去转换日期字符串，然后再尝试使用其他的Date可接受的输入进行转换。
+
 Additionally, date objects now have a new .toISOString() method that outputs the date in an ISO format.
 
-var date = new Date("2009-05-21T16:06:05.000Z");
+另外，Date对象新增了一个toISOString方法，用于输出ISO日期格式的字符串。
+
+	var date = new Date("2009-05-21T16:06:05.000Z");
  
-// Prints 2009-05-21T16:06:05.000Z
-print( date.toISOString() );
-.trim()
+	// Prints 2009-05-21T16:06:05.000Z
+	print( date.toISOString() );
+
+### .trim() ###
 A native, built-in, .trim() is now included for strings. Works identically to all the other trim methods out there – with the potential to possibly work faster.
 
 Steven Levithan has discussed the trim method in great depth.
 
-Array
+### Array ###
 The JavaScript Array Extras that’ve been around for, what seems like, forever are finally formally specified. This includes the following methods: indexOf, lastIndexOf, every, some, forEach, map, filter, reduce, and reduceRight.
 
 Additionally a new Array.isArray method is included, providing functionality very similar to the following:
