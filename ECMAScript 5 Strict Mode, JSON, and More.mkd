@@ -1,69 +1,43 @@
-## ECMAScript 5 Strict Mode, JSON, and More ##
+## [译]ECMAScript 5 Strict Mode, JSON, and More ##
 
-前面我分析了ECMAScript 5′s的Object和Property系统。这是语言的一个新的方向并且值得重点关注。
+之前我分析了ECMAScript 5′s的Object和Property系统。这是语言发展的一个新的方向并且值得重点关注。
 
-同时，ECMAScript 5增加了其他许多值得关注的新特性以及API。其中最大的改变就是引入严格模式以及原生JSON支持。
+同时，ECMAScript 5也增加了其他许多值得关注的新特性以及API。其中最大的改变就是引入了严格模式以及原生的JSON支持。
 
 ### 严格模式（Strict Mode） ###
-Strict Mode is a new feature in ECMAScript 5 that allows you to place a program, or a function, in a “strict” operating context. This strict context prevents certain actions from being taken and throws more exceptions (generally providing the user with more information and a tapered-down coding experience).
 
-ECMAScript 5的严格模式是一个新特性，这个新特性允许你的代码或者某一个函数运行在一个“严格”的上下文中。严格模式上下文阻止特定的行为并且抛出异常（该模式下一般会反馈给用户更多的异常信息）。
+ECMAScript 5的严格模式是一个新特性，严格模式允许你整个脚本或者某一个函数运行在一个“严格”上下文中。“严格”上下文阻止特定的行为并且抛出异常（该模式下一般会反馈给用户更多的异常信息）。
 
-Since ECMAScript 5 is backwards-compatible with ECMAScript 3, all of the “features” that were in ECMAScript 3 that were “deprecated” are just disabled (or throw errors) in strict mode, instead.
-
-由于ECMAScript 5向后兼容ECMAScript 3，所有在ECMAScript 3里不赞成使用的特性，在严格模式下，都被禁用（或者抛出异常）。
-
-Strict mode helps out in a couple ways:
+ECMAScript 5向后兼容ECMAScript 3，所有在ECMAScript 3里不赞成使用的特性，在严格模式下，都将被禁用（或者直接抛出异常）。
 
 严格模式带来了以下几个方面的好处：
 
-It catches some common coding bloopers, throwing exceptions.
 *	捕捉了几个常见的编码陷阱，并且抛出异常
-
-It prevents, or throws errors, when relatively “unsafe” actions are taken (such as gaining access to the global object).
 *	阻止对于相对比较不安全的代码运行或者抛出异常
-
-It disables features that are confusing or poorly thought out.
 *	禁止令人疑惑，或者考虑不够周全的语言特性
 
-Most of the information about strict mode can be found in the ES5 specification [PDF] on page #235.
 更多关于严格模式的详细信息，请参考[ES5标准文档](http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf)的第235页。
 
-It should be noted that ECMAScript 5′s strict mode is different from the strict mode available in Firefox (which can be turned on by going to about:config and enabled javascript.options.strict). ES5′s strict mode complains about a completely different set of potential errors (whereas Firefox’s existing strict mode tries to enforce some good practices, only).
-
-值得注意的是，ECMAScript 5的严格模式和[火狐浏览器的严格模式](https://developer.mozilla.org/zh-CN/docs/Mozilla/Preferences/Preference_reference/javascript.options.strict)是不同的（你可以在火狐浏览器的地址栏上输入about:config，进入配置页面，设置javascript.options.strict选项来启用浏览器的严格模式）。ES5的严格模式禁止一系列不同的潜在错误（而火狐浏览器仅仅只是尝试强制某些好的实践。）
-
-How do you enable strict mode?
+值得注意的是，ECMAScript 5的严格模式和[火狐浏览器的严格模式](https://developer.mozilla.org/zh-CN/docs/Mozilla/Preferences/Preference_reference/javascript.options.strict)是不同的（你可以在火狐浏览器的地址栏上输入about:config，进入配置页面，设置javascript.options.strict选项来启用浏览器的严格模式）。ES5的严格模式阻止一系列不同的潜在错误（而火狐浏览器仅仅只是尝试强制实施某些优秀的实践。）
 
 **如何使用严格模式？**
-
-Simple. Toss this at the top of a program to enable it for the whole script:
 
 很简单。在程序的开头添加如下代码就能启用严格模式：
 
 	"use strict";
 
-
-Or place it within a function to turn on strict mode only within that context.
-
-或者可以把它添加在函数顶部，只在函数内部启用严格模式。
+或者可以把它添加在函数顶部，只在函数范围内启用严格模式。
 
 	function imStrict(){
 	  "use strict";
 	  // ... your code ...
 	}
 
-Note the syntax that’s used to enable strict mode (I love this!). It’s simply a string in a single statement that happens to contain the contents “use strict”. No new syntax is introduced in order to enable strict mode. This is huge. This means that you can turn strict mode on in your scripts – today – and it’ll have, at worst, no side effect in old browsers.
+这里没有使用任何新语法来启用严格模式，只是简单的添加一个“use strict”字符串。这意味着你可以在你的脚本里使用严格模式并且不会对旧版本浏览器有任何影响，旧版浏览器会安全地忽视。
 
-这里没有任何使用任何新语法来启用严格模式，只是简单的使用了一个“use strict”的字符串而没有引入任何新的语法。这意味着你可以在你的脚本里使用严格模式并且不会对旧版本浏览器有任何影响。
+ECMAScript 5几乎没有引入任何新的语法。这意味着在某种程度上你可以编写支持优雅降级的ES5脚本——这在ES4是无法支持的。ES5严格模式的启用方式，就是优雅降级的一个很好的例子。
 
-As you may note from the examples here and in the previous post there are virtually no new syntax additions or changes to the language in ECMAScript 5. This means that you can write your ES5 scripts in a manner that will be able to gracefully degrade for older useragents – something that wasn’t possible with ECMAScript 4. The way in which strict mode is enabled is a great illustration of that point in practice.
-
-在ECMAScript 5几乎没有引入任何新的语法。这意味着在某种程度上，你可以编写支持优雅降级的ES5脚本——甚至是ES4不能做到的。ES5严格模式的启用方式，就是优雅降级的一个很好的例子。
-
-A neat aspect of being able to define strict mode within a function is that you can now define complete JavaScript libraries in a strict manner without affecting outside code.
-
-通过灵活的使用方法，你可以使整个javascript库运行在严格模式下而不影响外部代码。
+有一个优雅的方法可以在不影响外部代码的情况下使整个javascript库运行在严格模式下：
 
 	// Non-strict code...
  
@@ -75,27 +49,15 @@ A neat aspect of being able to define strict mode within a function is that you 
  
 	// Non-strict code...
 
-A number of libraries already use the above technique (wrapping the whole library with an anonymous self-executing function) and they will be able to take advantage of strict mode very easily.
-
-有很多的javascript库使用闭包进行编写，这样的写法能很容易用上严格模式带来的好处。
-
-So what changes when you put a script into strict mode? A number of things.
+很多的javascript库使用上面的方式（也就是闭包啦）进行编写，这样的写法能很容易用上严格模式带来的好处。
 
 那么当你启用了严格模式之后都会有那些改变呢？
 
-Variables and Properties
-
 ** 变量和属性 **
 
-An attempt to assign foo = "bar"; where ‘foo’ hasn’t been defined will fail. Previously it would assign the value to the foo property of the global object (e.g. window.foo), now it just throws an exception. This is definitely going to catch some annoying bugs.
+尝试给未定义的变量进行赋值操作，比如：foo = "bar" 将会失败。之前版本的ES会自动将该属性定义在全局对象之下（比如window.foo），现在运行时则会抛出异常。这一改变明显地避免了一些烦人的BUG。
 
-尝试给未定义的变量进行赋值操作，比如：foo = "bar" 将会失败。之前版本的ES会自动将该属性定义在全局对象之下（比如window.foo），现在运行时则会抛出异常。这一改变明确地避免了一些烦人的BUG。
-
-Any attempts to write to a property whose writable attribute is set to false, delete a property whose configurable attribute is set to false, or add a property to an object whose extensible attribute is set to false will result in an error (these attributes were discussed previously). Traditionally no error will be thrown when any of these actions are attempted, it will just fail silently.
-
-尝试给设置为不可写的属性赋值，删除设置为不可删除的属性，或者给不可拓展的对象添加新属性都将导致错误（关于属性的元数据如何配置等，请参考[ECMAScript 5 Objects and Properties](http://ejohn.org/blog/ecmascript-5-objects-and-properties/)一文）。
-
-Deleting a variable, a function, or an argument will result in an error.
+尝试给元数据writable配置为false的属性赋值，删除元数据configurable设置为false的属性，或者给元数据extensible设置为false的对象添加新属性都将导致错误（关于属性的元数据如何配置等，请参考[ECMAScript 5 Objects and Properties](http://ejohn.org/blog/ecmascript-5-objects-and-properties/)一文）。
 
 删除变量，函数或者参数都将导致错误。
 
@@ -109,16 +71,12 @@ Deleting a variable, a function, or an argument will result in an error.
     	  delete arg; // Error
 	}
 
-Defining a property more than once in an object literal will cause an exception to be thrown
-
 在对象直接量里重复定义属性，运行时将会抛出异常
 
 	// Error
 	{ foo: true, foo: false }
 
 **eval**
-
-Virtually any attempt to use the name ‘eval’ is prohibited – as is the ability to assign the eval function to a variable or a property of an object.
 
 事实上，任何使用‘eval’这一关键字的方式都是被禁止的——比如把‘eval’函数赋值到一个变量上或者作为一个对象的属性的名字。
 
@@ -132,34 +90,29 @@ Virtually any attempt to use the name ‘eval’ is prohibited – as is the abi
 	function(eval){}
 	new Function("eval")
 
-Additionally, attempts to introduce new variables through an eval will be blocked.
-
-另外，严格模式下，通过eval函数引入新的变量这一途径已经被封住了。
+另外，严格模式下无法通过eval函数引入新的全局变量。
 
 	eval("var a = false;");
 	print( typeof a ); // undefined
 
 **Functions**
 
-Attempting to overwrite the arguments object will result in an error:
 重写arguments对象将会导致错误:
+
 	arguments = [...]; // not allowed
 
-Defining identically-named arguments will result in an error function( foo, foo ) {}.
-重复定义参数也会导致错误。
+重复定义参数也会导致错误，比如：
 
-Access to arguments.caller and arguments.callee now throw an exception. Thus any anonymous functions that you want to reference will need to be named, like so:
+	function( foo, foo ) {}
 
-严格模式下现在访问arguments.caller和arguments.callee运行时会抛出异常。因此如果你要引用任何匿名函数，你必须首先命名该匿名函数，比如像这样做：
+严格模式下访问arguments.caller和arguments.callee运行时会抛出异常。因此如果你要引用匿名函数，你必须命名该函数，比如像这样做：
 
 	setTimeout(function later(){
 	  // do stuff...
 	  setTimeout( later, 1000 );
 	}, 1000 );
 
-The arguments and caller properties of other functions no longer exist – and the ability to define them is prohibited.
-
-严格模式会移除函数内部的子函数的arguments以及caller属性，当然，你也无法定义这两个属性。
+严格模式会移除内嵌函数的arguments以及caller属性，当然，你也无法定义这两个属性。
 
 	function test(){
 	  function inner(){
@@ -169,42 +122,25 @@ The arguments and caller properties of other functions no longer exist – and t
 	  }
 	}
 
-Finally, a long-standing (and very annoying) bug has been resolved: Cases where null or undefined is coerced into becoming the global object. Strict mode now prevents this from happening and throws an exception instead.
-
-最后，一个由来已久（并且非常烦人）的BUG：使用null或者undefined作为Function.prototype.call或Function.prototype.apply方法的第一个参数时，函数内部的this将会指向全局对象，现在严格模式阻止这一行为的发生并且抛出异常：
+最后，一个由来已久（并且非常烦人）的BUG，使用null或者undefined作为Function.prototype.call或Function.prototype.apply方法的第一个参数时，函数内部的this将会指向全局对象。严格模式阻止这一行为并且抛出异常：
 
 	(function(){ ... }).call( null ); // Exception
 
 **with(){}**
 
-with(){} statements are dead when trict mode is enabled – in fact it even appears as a syntax error. While the feature was certainly mis-understood and possibly mis-used I’m not convinced that it’s enough to be stricken from the record.s
+严格模式下with语句是无法使用的——实际上如果你在严格模式下使用with语句，运行时会抛出语法错误。
 
-严格模式下with语句是无法使用的——它甚至变成错误的语法。
-
-The changes made in ECMAScript 5 strict mode are certainly varied (ranging from imposing stylistic preferences, like removing with statements, to fixing legitimately bad language bugs, like the ability to redefine properties in object literals). It’ll be interesting to see how people begin to adopt these points and how it’ll change JavaScript development.
-
-ECMAScript 5严格模式带来了很多运行时行为的改变（加强了语言的风格偏好，比如移除with语句；修复遗留的语言层面的陷阱，比如可以在对象直接量里重复定义属性）。观察语言的使用者们如何开始接受这些改变并且这些改变最终如何影响到JavaScript的开发将会是一件非常有趣的事情。
+ECMAScript 5严格模式带来了很多运行时行为的改变（加强了语言的风格偏好，比如移除with语句；修复遗留的语言层面的陷阱，比如可以在对象直接量里重复定义属性）。开发者们如何开始接受这些改变并且这些改变最终如何影响到JavaScript的开发将会是一件非常有趣的事情。
 
 ### JSON ###
-The second major feature of the language is the addition of native JSON support to the language.
 
-ES 5第二个主要的语言特性就是原生JSON支持。
+ES 5第二个主要的语言特性就是原生JSON支持。我非常高兴这一特性终于成为了标准的一部分。
 
-I’ve been championing this move for a long time and I’m glad to see it finally arrive in a specification.
+与此同时，请着手开始把你使用JSON的程序迁移到[Crockford](http://en.wikipedia.org/wiki/Douglas_Crockford)的[json2.js](https://github.com/douglascrockford/JSON-js)上。json2.js完全支持ES 5的标准并且在没有原生支持的时候还可以优雅降级。
 
-我非常高兴这一特性终于成为了标准的一部分。
-
-In the meantime PLEASE start migrating your JSON-using applications over to Crockford’s json2.js. It is fully compatible with the ECMAScript 5 specification and gracefully degrades if a native (faster!) implementation exists.
-
-与此同时，请着手开始把你应用到JSON的程序迁移到[Crockford](http://en.wikipedia.org/wiki/Douglas_Crockford)的[json2.js](https://github.com/douglascrockford/JSON-js)上。json2.js完全支持ES 5的标准并且如果运行时环境原生支持JSON的时候还可以优雅降级。
-
-There are two primary methods for handling JSON: JSON.parse (which converts a JSON string into a JavaScript object) and JSON.stringify (which convert a JavaScript object into a serialized string).
-
-JSON这一对象有两个主要的方法：JSON.parse（把JSON字符串反序列化为JavaScript对象） 和 JSON.stringify（将JavaScript对象序列化成为JSON字符串）。
+JSON对象有两个主要的方法：JSON.parse（把JSON字符串反序列化为JavaScript对象）和JSON.stringify（将JavaScript对象序列化成为JSON字符串）。
 
 JSON.parse( text )
-
-Converts a serialized JSON string into a JavaScript object.
 
 JSON字符串反序列化为JavaScript对象。
 
@@ -212,8 +148,6 @@ JSON字符串反序列化为JavaScript对象。
 	// Prints 'John'
 	print( obj.name );
 	JSON.parse( text, translate )
-
-Use a translation function to convert values or remove them entirely.
 
 这个方法支持传入一个反序列化函数以自定义反序列化或者移除对象属性。
 
@@ -231,16 +165,12 @@ Use a translation function to convert values or remove them entirely.
 	print( obj.last );
 	JSON.stringify( obj )
 
-Convert an object into a serialized JSON string.
-
 把JavaScript对象序列化成为JSON字符串。
 
 	var str = JSON.stringify({ name: "John" });
 	// Prints {"name":"John"}
 	print( str );
 	JSON.stringify( obj, ["white", "list"])
-
-Serialize only a specific white list of properties.
 
 指定需要进行序列化的对象属性列表进行序列化。
 
@@ -249,8 +179,6 @@ Serialize only a specific white list of properties.
 	// Prints {"name":"John"}
 	print( str );
 	JSON.stringify( obj, translate )
-
-Serializes the object using a translation function.
 
 使用自定义的序列化函数序列化对象。
 
@@ -265,9 +193,7 @@ Serializes the object using a translation function.
 	print( str );
 	JSON.stringify( obj, null, 2 )
 
-Adds the specified number of spaces to the output, printing it evenly.
-
-添加指定的空格数量作为分隔符到序列化结果上，并且整体打印出来。
+添加指定的空格数量作为分隔符到序列化结果上。
 
 	var str = JSON.stringify({ name: "John" }, null, 2);
 	// Prints:
@@ -277,8 +203,6 @@ Adds the specified number of spaces to the output, printing it evenly.
 	print( str );
 	JSON.stringify( obj, null, "\t" )
 
-Uses the specified string to do the spacing.
-
 使用其他的字符串作为分隔符。
 
 	var str = JSON.stringify({ name: "John" }, null, "\t");
@@ -286,9 +210,7 @@ Uses the specified string to do the spacing.
 	// {\n\t"name": "John"\n}
 	print( str );
 
-Additionally, a few new generic methods have been added to some of the base objects but, frankly, they aren’t that interesting. The results from String, Boolean, and Number are just equivalent to calling .valueOf() and the result from Date is equivalent to calling .toISOString()
-
-另外还有一些新的方法添加到了语言的基本类型上，不过坦白讲，这些新方法并不是那么有趣。调用String, Boolean, 和 Number对象的valueOf方法可以直接获得对象的原始值，而Date的valueOf则返回和toISOString方法一样的结果。
+另外还有一些新的方法添加到了语言的基本类型上，不过坦白讲，这些新方法并不是那么有趣。调用String, Boolean, 和Number对象的valueOf方法可以直接获得对象的原始值，而Date的valueOf则返回和toISOString方法一样的结果。
 
 	// Yawn...
 	String.prototype.toJSON
@@ -297,13 +219,10 @@ Additionally, a few new generic methods have been added to some of the base obje
 	Date.prototype.toJSON
 
 ### .bind() ###
-A welcomed addition to the language is a built-in .bind() method for enforcing the context of a function (virtually identical to Prototype’s .bind implementation).
-
-新添加到语言的bind方法会创建一个新函数,称为绑定函数。当调用这个绑定函数时,绑定函数会以创建它时传入bind方法的第一个参数作为this,传入bind方法的第二个以及以后的参数加上绑定函数运行时本身的参数按照顺序作为原函数的参数来调用原函数。
 
 Function.prototype.bind(thisArg, arg1, arg2....)
 
-Enforces the ‘this’ of the specified function to a specific object – and passing in any specified arguments.
+新添加到语言Function对象的bind方法会创建一个新函数,称为绑定函数。当调用这个绑定函数时,绑定函数会以创建它时传入bind方法的第一个参数作为this,传入bind方法的第二个以及以后的参数加上绑定函数运行时本身的参数按照顺序作为原函数的参数来调用原函数。
 
 	var obj = {
 	  method: function(name){
@@ -314,17 +233,11 @@ Enforces the ‘this’ of the specified function to a specific object – and p
 	setTimeout( obj.method.bind(obj, "John"), 100 );
 
 ### Date ###
-Dates are now capable of both parsing and outputting ISO-formatted dates. Thank goodness, about time. rimshot
-
-现在可以使用ISO时间格式字符串反序列化为Date对象和将Date对象输出为ISO时间格式字符串。
-
-The Date constructor now attempts to parse the date as if it was ISO-formatted, first, then moves on to the other inputs that it accepts.
+现在可以使用ISO时间格式字符串初始化Date实例和将Date对象输出为ISO时间格式字符串。
 
 Date对象构造器首先尝试使用ISO时间格式去转换日期字符串，然后再尝试使用其他的Date可接受的输入进行转换。
 
-Additionally, date objects now have a new .toISOString() method that outputs the date in an ISO format.
-
-另外，Date对象新增了一个toISOString方法，用于输出ISO日期格式的字符串。
+Date对象新增了一个toISOString方法，输出ISO日期格式的字符串。
 
 	var date = new Date("2009-05-21T16:06:05.000Z");
  
@@ -332,21 +245,18 @@ Additionally, date objects now have a new .toISOString() method that outputs the
 	print( date.toISOString() );
 
 ### .trim() ###
-A native, built-in, .trim() is now included for strings. Works identically to all the other trim methods out there – with the potential to possibly work faster.
 
-Steven Levithan has discussed the trim method in great depth.
+string原生支持trim方法，Steven Levithan对[trim方法](http://blog.stevenlevithan.com/archives/faster-trim-javascript)有深入的分析。
 
 ### Array ###
-The JavaScript Array Extras that’ve been around for, what seems like, forever are finally formally specified. This includes the following methods: indexOf, lastIndexOf, every, some, forEach, map, filter, reduce, and reduceRight.
 
-Additionally a new Array.isArray method is included, providing functionality very similar to the following:
+[JavaScript Array对象的拓展方法](https://developer.mozilla.org/en-US/docs/JavaScript/New_in_JavaScript/1.6?redirectlocale=en-US&redirectslug=New_in_JavaScript_1.6#Array_extras)已经存在了很久了，终于成为了标准文档的一部分了。标准文档对Array对象新添加的拓展方法有：indexOf，lastIndexOf，every，some，forEach，map，filter，reduce，and reduceRight。
 
-Array.isArray = function( array ) {
-  return Object.prototype.toString.call( array ) === "[object Array]";
-};
-Altogether I think ECMAScript 5 makes for an interesting package. It isn’t the massive leap that ECMAScript 4 promised but it is a series of respectable improvements that reduces the number of obvious bugs while making the language safer and faster. I’m looking forward to when some implementations start to go public.
+此外，标准添加了Array.isArray这一方法，用于判断一个对象是否是数组对象，提供的功能与以下代码非常相似：
 
-[source](http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/)
+	Array.isArray = function( array ) {
+	  return Object.prototype.toString.call( array ) === "[object Array]";
+	};
 
-[ECMAScript 5 Objects and Properties](http://ejohn.org/blog/ecmascript-5-objects-and-properties/)
+我想所有的这一切新特性令ES5成了一个非常有趣的包。它不像ES4承诺的那样的超前，规模庞大，但也提供了数量相当可观的更新，减少了明显的BUG数量，使语言本身更加安全高效。
 
