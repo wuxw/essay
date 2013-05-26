@@ -1,4 +1,6 @@
-## [译]ECMAScript 5 Strict Mode, JSON, and More ##
+## [译]ECMAScript 5 严格模式, JSON等新特性 ##
+
+** 原文：[ECMAScript 5 Strict Mode, JSON, and More](http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/) **
 
 之前我分析了ECMAScript 5′s的Object和Property系统。这是语言发展的一个新的方向并且值得重点关注。
 
@@ -53,7 +55,7 @@ ECMAScript 5几乎没有引入任何新的语法。这意味着在某种程度�
 
 那么当你启用了严格模式之后都会有那些改变呢？
 
-** 变量和属性 **
+**变量和属性**
 
 尝试给未定义的变量进行赋值操作，比如：foo = "bar" 将会失败。之前版本的ES会自动将该属性定义在全局对象之下（比如window.foo），现在运行时则会抛出异常。这一改变明显地避免了一些烦人的BUG。
 
