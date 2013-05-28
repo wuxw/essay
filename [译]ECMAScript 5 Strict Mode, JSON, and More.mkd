@@ -1,6 +1,6 @@
 ## [译]ECMAScript 5 严格模式, JSON等新特性 ##
 
-** 原文：[ECMAScript 5 Strict Mode, JSON, and More](http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/) **
+**原文：[ECMAScript 5 Strict Mode, JSON, and More](http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/)**
 
 之前我分析了ECMAScript 5′s的Object和Property系统。这是语言发展的一个新的方向并且值得重点关注。
 
