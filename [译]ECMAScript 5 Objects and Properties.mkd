@@ -1,0 +1,1 @@
+[ECMAScript 5 Objects and Properties](http://ejohn.org/blog/ecmascript-5-objects-and-properties/)
