@@ -77,7 +77,7 @@ javascript的属性系统已经被广大开发者详尽的研究过了。属性�
 	// {"value": "test", "writable": true,
 	//  "enumerable": true, "configurable": true}
 
-**		.defineProperty( obj, prop, desc )**
+**	Object.defineProperty( obj, prop, desc )**
 
 通过defineProperty方法，你可以给对象定义一个新的属性（或者修改属性的属性描述）。这个方法接受一个属性描述对象作为参数初始化或者更新属性。
 
@@ -211,7 +211,7 @@ Object.getOwnPropertyNames和Object.keys几乎一样，但不同的是，Object.
 	  return new ctor( props );
 	};
 
-**其他实现示例：(by Ben Newman)**
+**其他实现示例：**
 
 	Object.create = function( proto, props ) {
 	  var obj = new Object();
@@ -313,4 +313,4 @@ PS：writable, enumerable, 和 configurable这三个属性描述的默认值，�
 	john.name = 'monkey';
 	console.log( john.name );console.log( john.test );
 
-})();
+	})();
