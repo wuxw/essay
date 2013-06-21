@@ -1,0 +1,21 @@
+**原文地址：[
+How to Update / Upgrade from Linux Mint 14 Nadia to Linux Mint 15 Olivia](http://linuxg.net/how-to-update-upgrade-from-linux-mint-14-nadia-to-linux-mint-15-olivia/)**
+
+为了能得到正确的软件源，在命令行终端输入以下两行命令，把“quantal”替换成“raring”以及把“nadia”替换成“olivia（linux mint 14的开发代号是nadia，而linux mint 15的代号是olivia）”：
+
+    sudo sed -i 's/quantal/raring/' /etc/apt/sources.list
+    sudo sed -i 's/nadia/olivia/' /etc/apt/sources.list
+    
+最后更新软件索引：
+
+    sudo apt-get -y update
+    
+软件索引更新完成之后，就可以进行系统升级了：
+
+    sudo apt-get -y dist-upgrade
+    
+系统升级过程中，有些软件会询问你是否使用最新的配置文件，我本人是全部选择Y的。就的配置文件依然会保留在同一个目录下，不过会带上.dpkg-old这样的后缀名（关于这一点，我并没有验证过，求验证）。
+
+在所有软件升级完成之后，重启系统以便完成升级。
+
+    sudo shutdown -r now

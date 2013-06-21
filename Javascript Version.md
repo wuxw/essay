@@ -1,6 +1,7 @@
 ##[前言]##
 
-这几天上网无意间看到一个新名词：Javascript Harmony。联想到以前的ES 5等，瞬间让我觉得我对javascript的相关版本的概念一直都很模糊。因此决定好好收集整理下相关的信息。
+这几天上网无意间看到一个新名词：Javascript Harmony。
+联想到以前的ES 5等，瞬间让我觉得我对javascript的过去的历史，现在的发展状况以及未来的趋势非常模糊。遂决定好好补习并且整理出一篇文档出来。
 
 ##[正文]##
 
@@ -36,40 +37,11 @@ DOM（文档对象模型）是 HTML 和 XML 的应用程序接口（API）。DOM
 
 通过 DOM API，你可以重构整个HTML文档。你可以添加、移除、改变或重排页面上的项目。
 
-##### 1.2.1 DOM的不同的部分 #####
-
-*	Core DOM	
-	
-	定义了一套标准的针对任何结构化文档的对象	
-
-*	XML DOM	
-	
-	定义了一套标准的针对 XML 文档的对象	
-
-*	HTML DOM	
-	
-	定义了一套标准的针对 HTML 文档的对象。
-
-##### 1.2.2 DOM的各个level #####
-
-*	Level 1	
-	
-	标准分为两部分，Core和HTML。Core定义了用于表示结构化文档的基础接口的同时，也定义了用于表示XML文档的拓展接口。HTML则提供了更为高层的接口，以更加方便处理文档。
-
-*	Level 2	
-
-	标准分为6个部分：DOM2 Core，Views，Events，Style，Traversal，Range以及DOM2 HTML。	
-
-*	Level 3	
-	
-	标准分为5个部分：DOM3 Core， Load and Save，Validation，Events以及XPath。
-
 更加详细的信息您可以参考[MDN文档](https://developer.mozilla.org/en-US/docs/DOM_Levels)。
 
 ##### 1.2.3 其他DOM #####
 
-除了 DOM Core 和 DOM HTML 外，还有其他几种语言发布了自己的 DOM 标准。这些语言都是基于 XML 的，每种 DOM 都给对应语言添加了特有的方法和接口：
-
+除了 DOM Core 和 DOM HTML 外，还有其他几种语言发布了自己的 DOM 标准。这些语言都是基于 XML 的，每种 DOM 都给对应语言添加了特有的方法和接口。
 
 #### 1.3 浏览器对象模型（BOM）####
 
@@ -99,7 +71,7 @@ BOM 主要处理浏览器窗口和框架，不过通常浏览器特定的 JavaSc
 其实在我看来JavaScript发展趋势大概有这么两种：
 
 	1.	改良，也就是下一代的ES 6，代号Harmony
-	2.	取代，比如非常流行的CoffeeScript，谷歌主导的Dart，还有微软的TypeScript
+	2.	被取代，比如非常流行的CoffeeScript，谷歌主导的Dart，还有微软的TypeScript
 
 #### 3.1 ECMAScript 6 ####
 
@@ -111,24 +83,65 @@ ES5的初衷是成为ES4所定义的标准和ES3中已经实现的标准之间�
 
 **Harmony是ES6的代号。**
 
-您可以在MDN上查看[FF对ECMAScript 6的支持情况](https://developer.mozilla.org/en-US/docs/JavaScript/ECMAScript_6_support_in_Mozilla)，另外可以在官方的WIKI上面浏览[ECMAScript 6草案](Ecma-262 Edition 6)
+您可以在MDN上查看[FF对ECMAScript 6的支持情况](https://developer.mozilla.org/en-US/docs/JavaScript/ECMAScript_6_support_in_Mozilla)，另外可以在官方的WIKI上面浏览[ECMAScript 6草案](http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts)。
 
-<!-- http://hax.iteye.com/blog/1122103 -->
-<!-- ECMAScript 5 compatibility table -->
-<!-- http://kangax.github.io/es5-compat-table/ -->
+目前已知在ES6中将会有的几个新东西：
+
++   module
++   Object.observe()
++   默认参数值
++   块级作用域
++   Map
++   Set
++   WeakMap
++   代理
++   一些新的API，比如Object.is，Array.from等
+
+博客园的紫云飞同学有翻译了这么一篇博文：[[译]ES6:JavaScript中将会有的几个新东西](http://www.cnblogs.com/ziyunfei/archive/2012/11/25/2784392.html)，你不妨阅读下以了解更多信息。
 
 #### 3.2 CoffeeScript ####
 
+官方主页：[CoffeeScript](http://coffeescript.org/)
+
+CoffeeScript 是一种新的编程语言，构建于 JavaScript 之上。CoffeeScript 提供了一种简洁的语法，对 Python 或 Ruby 开发人员极具吸引力。它还提供了许多函数式编程特性，灵感来自于诸如 Haskell 和 Lisp 这类语言。CoffeeScript 可编译成高效 JavaScript，除了可在 Web 浏览器中运行 JavaScript，您还可以将它与诸如 Node.js 一类的技术相结合用于构建服务器应用程序。
+
+在IBM的developerWorks网站上有这么一个入门系列文章介绍CoffeeScript：
+
++   [初步了解 CoffeeScript，第 1 部分: 入门](http://www.ibm.com/developerworks/cn/web/wa-coffee1/)
++   [初步了解 CoffeeScript，第 2 部分: 通过动手实践示例学习语言](http://www.ibm.com/developerworks/cn/web/wa-coffee2/)
++   [初步了解 CoffeeScript，第 3 部分: 在客户端使用 CoffeeScript](http://www.ibm.com/developerworks/cn/web/wa-coffee3/)
++   [初步了解 CoffeeScript，第 4 部分: 在服务器端使用 CoffeeScript](http://www.ibm.com/developerworks/cn/web/wa-coffee4/)
+
 #### 3.3 Google Dart ####
 
-官方主页：http://www.dartlang.org/
-<!-- http://www.guao.hk/posts/google-to-unveil-dart-programming-language.html -->
+官方主页：[Dart](http://www.dartlang.org/)
+Dart是一款面向对象的基于类概念的编程语言，其最核心的特性：
+
++   基于类 
++   可选类型（支持 dynamic/static typing）
++   丰富内置库 
++   开发工具丰富
+
+我只是浅尝则止的看了下Dart，有点是MINI JAVA的感觉。GOOGLE发布[Dart语言导览](http://www.dartlang.org/docs/dart-up-and-running/contents/ch02.html)，这边有一篇[中文版Dart语言导览](http://dart.lidian.info/wiki/Language_Tour)，你可以阅读这个版本快速上手Dart。不过话说我个人觉得面向对象确实是能很方便支持PITL，也就是programming-in-the-large，大规模编程，但我个人已经非常习惯了JS那一套灵活的动态特性，函数式特性，这种javascript-like的面向对象语言，一开始真心感觉别扭。
 
 #### 3.4 TypeScript ####
 
-http://www.typescriptlang.org/
+官方主页：[TypeScript](http://www.typescriptlang.org/)
 
+微软出品的一款完全基于并且完全兼容JavaScript语法的语言，按照微软官方提供的TypeScript文档上的介绍来说，TypeScript就是Javascript语言的语法糖。TypeScript提供了以下的特性：
 
++   支持静态类型
++   基于类的面向对象编程
++   提供了基于vs的编辑器插件（微软系开发者的福音，不过VS实在太重了，好在也有提供SublimeText的插件）
++   支持node.js？（在官方站点看到可以使用npm安装，我想应该是支持的。本人没有试用过TypeScript，求验证）
+
+相比Dart而言，TypeScript本身提供的功能较少、较弱；其他功能由第三方js库提供，根据项目需要，可能要引入多个第三方js库。不过优点相对也是非常明显的，TypeScript的Js兼容性不错。
+
+#### 3.5 其他 ####
+
+在整理这篇博文的过程中，浏览到传说中上帝的玩偶：[haXe语言](http://haxe.org/)这个语言，详细的没有了解过，不过貌似这个语言能够夸语言，使用haxe编写的代码能够被翻译成为其他语言，比如haXe -> C++，haXe -> JS ，haXe -> as3/swf，haXe -> php。
+
+这个语言感觉比较冷，而且是由开源社区推动发展的，另外，中文的文档相对也比较少，英语文档似乎也不丰富的样子，实际使用的话估计会碰到不少钉子。
 
 [参考文档]
 
@@ -145,3 +158,10 @@ http://www.typescriptlang.org/
 11.	[还原JavaScript的真实历史](http://blog.csdn.net/aimingoo/article/details/1932315)
 12.	[详图实证：再谈JavaScript的语源问题](http://kb.cnblogs.com/page/140723/)
 13.	[ECMAScript](http://book.51cto.com/art/201006/207147.htm)
+14. [haxe 移动设备跨平台开发](http://blog.csdn.net/wyyayy/article/details/7657294)
+15. [我为什么选择haxejs，而不是dart/typescript](http://freewind.me/blog/20130122/2019.html)
+16. [快速瞭解 TypeScript 是什麼東西](http://blogs.msdn.com/b/ericsk/archive/2012/10/02/quick-look-on-typescript.aspx)
+17. [Dart准备好了吗](http://www.infoq.com/cn/news/2012/10/dart-sdk)
+18. [Google Dart精粹：应用构建，快照和隔离体](http://www.infoq.com/cn/articles/google-dart)
+19. [JavaScript的未来方向之观察](http://hax.iteye.com/blog/1122103)
+20. [[译]ES6:JavaScript中将会有的几个新东西](http://www.cnblogs.com/ziyunfei/archive/2012/11/25/2784392.html)
