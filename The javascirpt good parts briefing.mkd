@@ -1,0 +1,31 @@
+#The Javascript good parts briefing#
+
+##语法##
+
+###标示符###
+
+标示符由一个字母或者下划线开头，其后可以选择性添加一个或者多个字母、数字或者下划线，Javascript内部有一些保留的标示符。
+
+###数字###
+
+Javascript只有一个单一的数字类型，它在内部被表示为64位的浮点数。Javascript并没有分理处单独的整数类型，因此1和1.0是相同的值。
+
+###字符串###
+
+字符串直接量可以被包含在单引号或者双引号中，可能包含0个或者多个字符。\（反斜线）是转义字符。Javascript中的所有字符都是16位的。另外，Javascript没有字符类型，要表示一个字符，只需要创建一个仅包含一个字符的字符串即可。
+
+###语句###
+
+Javascript有三种作用域：全局作用域，局部作用域（也就是函数作用域），以及作用域链。
+
+代码块是包在一对花括号中的一组语句，Javascript不会为代码块中的代码创建一个新的作用域。因此，Javascript的最小的作用域就是局部作用域。
+
+另外，在Javascript中，函数内部的内部函数，在代码执行过程中，一定都是在函数顶部声明，这点和函数局部变量有所区别：变量在顶部声明，初始化的时候值为undefinded，只有运行到赋值语句的时候，才会真正对变量赋值。
+
+参考文档：
+
+1.  [编译原理](http://www.baike.com/wiki/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86)
+2.  [Example of linker and loader?](http://wiki.answers.com/Q/Example_of_linker_and_loader)
+3.  [Linux内存管理](http://www.kerneltravel.net/journal/v/mem.htm)
+4.  [linux进程内存布局](http://mqzhuang.iteye.com/blog/901602)
+5.  [深入理解JavaScript作用域和作用域链](http://developer.51cto.com/art/201109/289286.htm)
