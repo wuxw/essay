@@ -24,7 +24,7 @@ Javascript只有一个单一的数字类型，它在内部被表示为64位的�
 
     基本的**条件语句**有if和switch，**循环语句**有while，for和do，**强制跳转语句**有break，return和throw。
 
-    Javascript认为以下的值为**假**（falsy）:
+    Javascript认为**以下的值为假（falsy）**:
 
     +   false
     +   null
@@ -33,7 +33,7 @@ Javascript只有一个单一的数字类型，它在内部被表示为64位的�
     +   数字 0
     +   数字 NaN
 
-    其他所有值都为真，包括true，字符串"false"，以及所有对象。
+    **其他所有值都为真**：包括true，字符串"false"，以及所有对象。
 
     **for循环语句**是我们常用的循环语句，其常见的形式由三个可选从句控制：初始化语句（initialization）、条件从句（condition）和增量从句（increment）。
 
@@ -140,11 +140,71 @@ Javascript继承以及原型链是一门很深的学问，关于继承，有这�
 +   [Javascript Object Layout](http://www.mollypages.org/misc/js.mp)
 +   [强大的原型和原型链](http://www.cnblogs.com/TomXu/archive/2012/01/05/2305453.html)
 
->NOTE:  我承认Javascript的原型以及原型的constructor水很深，矛盾很多，非常容易引起混乱。
+>NOTE:  Javascript的原型以及原型的constructor水很深，矛盾很多，非常容易引起混乱。
 
 ###反射###
 
+1.  对变量或值调用[typeof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof)运算符将返回下列值之一：
+
+    ><table>
+    >  <thead>
+    >    <tr>
+    >      <th scope="col">Type</th>
+    >      <th scope="col">Result</th>
+    >    </tr>
+    >  </thead>
+    >  <tbody>
+    >    <tr>
+    >      <td>Undefined</td>
+    >      <td><code>"undefined"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>Null</td>
+    >      <td><code>"object"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>Boolean</td>
+    >      <td><code>"boolean"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>Number</td>
+    >      <td><code>"number"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>String</td>
+    >      <td><code>"string"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>Host object (provided by the JS environment)</td>
+    >      <td><em>Implementation-dependent</em></td>
+    >    </tr>
+    >    <tr>
+    >      <td>Function object (implements [[Call]] in ECMA-262 terms)</td>
+    >      <td><code>"function"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>E4X XML object</td>
+    >      <td>"xml"</td>
+    >    </tr>
+    >    <tr>
+    >      <td>E4X XMLList object</td>
+    >      <td>"xml"</td>
+    >    </tr>
+    >    <tr>
+    >      <td>Any other object</td>
+    >      <td><code>"object"</code></td>
+    >    </tr>
+    >  </tbody>
+    ></table>
+
+2.  如果对象实例拥有独有的属性，[hasOwnProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty)方法返回true，否则返回false。
+
+    flight.hasOwnProperty('number');    // true  
+    flight.hasOwnProperty('constructor');    // false
+
 ###枚举###
+
+
 
 ###删除###
 
