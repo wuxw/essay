@@ -140,7 +140,7 @@ Javascript继承以及原型链是一门很深的学问，关于继承，有这�
 +   [Javascript Object Layout](http://www.mollypages.org/misc/js.mp)
 +   [强大的原型和原型链](http://www.cnblogs.com/TomXu/archive/2012/01/05/2305453.html)
 
->NOTE:  Javascript的原型以及原型的constructor水很深，矛盾很多，非常容易引起混乱。
+>NOTE:  Javascript的原型以及原型的constructor矛盾很多，非常容易引起混乱，建议朵花一点功夫研究。
 
 ###反射###
 
@@ -204,9 +204,18 @@ Javascript继承以及原型链是一门很深的学问，关于继承，有这�
 
 ###枚举###
 
+for in语句可以用来遍历一个**对象中所有的属性名**。该枚举过程会列出所有的属性——**包括函数和你可能不关心的原型中的属性**。值得一提的是，for in遍历的时出现的属性名的**顺序是不确定的**。
 
+    for( var prop in stooge ){
+        console.log( prop );
+        console.log( stooge[prop] )
+    }
 
 ###删除###
+
+delete运算符可以用来删除对象属性，但是它不会触及对象原型中的任何对象。
+
+[Understanding delete](http://perfectionkills.com/understanding-delete/)
 
 参考文档：
 
