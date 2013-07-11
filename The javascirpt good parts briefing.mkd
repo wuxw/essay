@@ -84,8 +84,6 @@ JavaScript是一门有着丰富表现力的语言，还有很多有意思的地�
 
 ##对象##
 
-###对象直接量###
-
 ###属性访问###
 
 要访问对象属性中包含的值，可以采用在[]后缀中括住一个字符串表达式的方式。如果字符串是一个常数并且是一个合法的Javascript标示符而非保留字，那么用.表示法替代。
@@ -213,9 +211,24 @@ for in语句可以用来遍历一个**对象中所有的属性名**。该枚举�
 
 ###删除###
 
-delete运算符可以用来删除对象属性，但是它不会触及对象原型中的任何对象。
+delete运算符可以用来删除对象属性，但是它不会触及对象原型中的任何对象。delete运算符的根本原理其实就是删除对象中不带有**DontDelete属性描述符**的属性。delete运算符仅仅只是删除对象的属性描述符，这个属性指向的对象并没有被释放。更加深入的分析[Understanding delete](http://perfectionkills.com/understanding-delete/)一文有深入的介绍，虽然是英文，不过还OK啦。
 
-[Understanding delete](http://perfectionkills.com/understanding-delete/)
+##函数(Functions)##
+
+###函数声明###
+
+大体上分为两种：函数表达式和函数变量
+
+参考StackOverflow的问答：[JavaScript: var functionName = function() {} vs function functionName() {}](http://stackoverflow.com/questions/336859/javascript-var-functionname-function-vs-function-functionname)
+
+严格模式下访问arguments.caller和arguments.callee运行时会抛出异常。因此如果你要引用匿名函数，你必须命名该函数，比如像这样做：
+
+    setTimeout(function later(){
+        // do stuff...
+        setTimeout( later, 1000 );
+    }, 1000 );
+
+关于this机制，可以参考[阮一峰](http://www.ruanyifeng.com/home.html)写的这篇博文[Javascript的this用法](http://www.ruanyifeng.com/blog/2010/04/using_this_keyword_in_javascript.html)
 
 参考文档：
 
