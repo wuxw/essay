@@ -131,7 +131,13 @@ JavaScript 没有传统的类继承模型，而是使用 prototypal 原型模型
 
 原型链接在**修改对象**时不起任何作用，只有在**检索值**时才被用到。当查找一个对象的属性时，JavaScript会向上遍历原型链，直到找到给定名称的属性为止，到查找到达原型链的顶部 - 也就是 Object.prototype - 但是仍然没有找到指定的属性，就会返回 undefined。
 
-Javascript继承以及原型链是一门很深的学问，关于继承，有这么一些参考链接，您不妨找来看下，并且手动编写一些代码：
+Javascript原型继承以及原型链是一门很深的学问。
+
+关于原型继承的原理，Vjeux写了这么一篇文章解释：[Javascript – How Prototypal Inheritance really works](http://blog.vjeux.com/2011/javascript/how-prototypal-inheritance-really-works.html)。
+
+>NOTE：我找不到[周爱民](http://blog.csdn.net/aimingoo)老师的那本经典的[《JAVASCRIPT语言精髓与编程实践》](http://product.china-pub.com/38730)的在线版本，不过这本书确实是好书，对javascript的研究很深入，值得找来看看。
+
+关于原型继承，有这么一些参考链接，您不妨找来看下，并且手动编写一些代码，以加深理解：
 
 +   [浅谈Javascript中的继承和原型链](http://lds2008.blogbus.com/logs/115213441.html)
 +   [继承与原型链](https://developer.mozilla.org/zh-CN/docs/JavaScript/Guide/Inheritance_and_the_prototype_chain)
