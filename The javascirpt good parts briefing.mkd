@@ -251,15 +251,13 @@ Javascript有全局作用域，局部作用域（函数作用域）。很多其�
 
 ###标示符解析（Identifier Resolution），执行上下文（Execution Contexts）以及作用域链（scope chains）###
 
-1.  执行上下文（Execution Contexts）
+1.  [执行上下文（Execution Contexts）](http://davidshariff.com/blog/what-is-the-execution-context-in-javascript/)
 
-    执行上线文是ECMA 262 3rd edition定义的一个Javascript运行时的抽象概念。所有的Javascript都运行在一个特定的执行上下文中：全局代码运行在全局执行上下文中，而每个函数都有关联的执行上下文。执行上下文（Execution Contexts）的详细定义可以参考ECMA 262 (3rd edition)标准的第10.2节。
+    执行上下文是ECMA 262 3rd edition定义的一个Javascript运行时的抽象概念。所有的Javascript都运行在一个特定的执行上下文中：全局代码运行在全局执行上下文中，而每个函数都有关联的执行上下文。执行上下文（Execution Contexts）的详细定义可以参考ECMA 262 (3rd edition)标准的第10.2节。
     
     函数调用的时候都会创建一个执行上下文，在创建执行上下文的时候，会按照固定的程序创建一系列对象。
     
-    首先是Activation Object，这是另外一个标准机制，它可以被认为是一个非标准对象（这个对象没有原型，并且不能被JS代码引用）。
-    
-    >NOTE: [ECMA-262-3 in detail. Chapter 2. Variable object](http://dmitrysoshnikov.com/ecmascript/chapter-2-variable-object/)
+    首先是[Activation Object](http://dmitrysoshnikov.com/ecmascript/chapter-2-variable-object/)，这是另外一个标准机制，它可以被认为是一个非标准对象（这个对象没有原型，并且不能被JS代码引用）。
     
     紧接下来的是arguments对象的创建。arguments对象是一个类似数组的对象，可以使用整数索引去访问这个对象的属性，比如arguments[0]。arguments对象创建完成之后，Activation Object会添加一个arguments属性，该属性指向该对象。
     
@@ -267,11 +265,17 @@ Javascript有全局作用域，局部作用域（函数作用域）。很多其�
 
 http://jibbering.com/faq/notes/closures/
 
+http://davidshariff.com/blog/javascript-scope-chain-and-closures/
+
+http://www.coachwei.com/2008/09/13/javascript-execution-context-closure-eval-and-this-keyword/
+
 >NOTE: 这里有一个关于[Javascript作用域的测试](http://madebyknight.com/javascript-scope/)，可以测试下自己对Javascript作用域的理解，挺好玩的。
 
 ###闭包###
 
 >NOTE：关于this机制，可以参考[阮一峰](http://www.ruanyifeng.com/home.html)写的这篇博文[Javascript的this用法](http://www.ruanyifeng.com/blog/2010/04/using_this_keyword_in_javascript.html)
+
+##数组Array##
 
 参考文档：
 
