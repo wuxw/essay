@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+    	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    
+    	<link id="t" title="print" rel="stylesheet" href="https://developer.cdn.mozilla.net/media/css/mdn-min.css?build=8987063" />
+    	<link id="tt" title="screen" rel="stylesheet" href="http://www.w3.org/StyleSheets/TR/W3C-REC.css" />
+    	<style title="style" type="text/css">
+    
+    		p { font-size: 14px; }
+    
+    	</style>
+    
+    </head>
+    <body>
+    
+    <script type="text/javascript">
+    
+    window.onload = function (argument) {
+    
+    	var sheets = document.styleSheets;
+    	for (var i = sheets.length - 1; i >= 0; i--) {
+    		var s = sheets[i];
+    
+    		console.log( s.title );
+    		console.log( s.disabled );
+    		console.log( s.media );
+    		console.log( '\n' );
+    	};
+    
+    }
+    
+    </script>
+    
+    </body>
+    </html>
