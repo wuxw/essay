@@ -4,13 +4,17 @@ Javascript已经成为一门被人们重新认识的编程语言，由于大量J
 
 许多现代编程语言都有自己的集成化文档生成工具，像Java有JavaDoc，.NET有NDoc，PHP有PHPDoc，这些自动化文档工具可以根据代码中的注释自动生成代码文档。
 
-###JsDoc###
+>NOTE: 我个人使用的是LINUX，所以本文很多命令都是在LINUX下运作的。
+
+###依赖###
+
+####JsDoc####
 
 实际上，[JsDoc](http://en.wikipedia.org/wiki/JSDoc)是一门用于标注Javascript源代码的语言。使用包含JsDoc定义的注解，程序员可以在Javascript注释中包含API文档。通过一系列工具进行批量处理，最终生成HTML或者Rich Text Format等格式的API文档。
 
 目前[JsDoc最新版本](https://github.com/jsdoc3)是3.0。
 
-###JsDoc Toolkit###
+####JsDoc Toolkit####
 
 [JsDoc Toolkit](https://code.google.com/p/jsdoc-toolkit/)是一个自动化文档工具，它是发布在Google code上的一个开源项目，和其他语言的文档工具一样，它可以自动从Javascript代码中提取注释生成格式化文档。
 
@@ -18,12 +22,255 @@ Javascript已经成为一门被人们重新认识的编程语言，由于大量J
 
 >NOTE:从 2010.07.27 开始，JsDoc Toolkit 2已经停止开发了，因此如果要使用JsDoc的话，还是推荐采用JsDoc3。
 
-###Grunt###
+####Grunt####
 
 [Grunt](http://gruntjs.com/)是一个基于[Node.js](http://nodejs.org/)的Javascript项目管理和构建自动化工具。目前的稳定版本是0.4.1。
 
-###grunt-jsdoc###
+>NOTE:关于如何在LINUX下安装GRUNT，请参考我以前编写过的这篇博文：[《在Linux Mint下安装Grunt》](http://my.oschina.net/knightuniverse/blog/129667)
+
+####grunt-jsdoc####
+
+grunt-jsdoc其实就是一个JsDoc Toolkit的包装，其配置最后都会传递给JsDoc Toolkit作为参数运行。
 
 [grunt-jsdoc](https://npmjs.org/package/grunt-jsdoc)是一个Grunt的插件。这个插件集成了JsDoc Toolkit 3，并且你能够通过配置Grunt任务来生成API文档。
 
 >NOTE:这里有一个和grunt-jsdoc很类似的grunt插件：[grunt-jsdoc-plugin](https://npmjs.org/package/grunt-jsdoc-plugin)，实际上他们是同一个开发者开发，但是区别是grunt-jsdoc是基于JsDoc Toolkit 3而grunt-jsdoc-plugin是基于JsDoc Toolkit 2的。之前因为不知道这个区别绕了很长的一段弯路。
+
+###安装###
+
+首先检查你是否已经安装好JAVA并且配置好JAVA_HOME这个环境变量了。JsDoc Toolkit是基于JAVA编写了，运行的时候也需要使用到JAVA环境。如果没有，LINUX下可以参考这篇文章安装和配置：[
+Ubuntu 上使用 OpenJDK 安装并运行 Tomcat](http://www.oschina.net/question/12_21632)
+
+想要在项目里面支持grunt-jsdoc其实很简单。因为本身grunt就是一个基于Node.js的软件，其插件也是通过npm进行维护的，那么我们安装jsdoc其实很方便，就一行代码。
+
+    npm install grunt-jsdoc --save-dev
+    
+###grunt-jsdoc的grunt任务配置###
+
+任务配置其实也是非常的简单。在我看来，其实Grunt就只支持两种任务，分别是基本的Task以及MultiTasks。这两者的区别是基本的Task的任务配置只有一个，而MultiTasks则有多个。__大多数的grunt插件任务都是MultiTasks。__
+
+__Task__
+
+API:
+
+    grunt.registerTask(taskName, [description, ] taskList)
+    
+使用示例：
+    
+    grunt.registerTask('default', ['jshint', 'qunit', 'concat', 'uglify']);
+    //  注意看，每一个taskList格式是这样的：“任务名：启用的任务配置”。通过这样的形式，我们可以指定MultiTasks运行时使用的配置，否则默认情况下，MultiTasks会依次使用每个配置去执行一遍任务。
+    grunt.registerTask('dist', ['concat:dist', 'uglify:dist']);
+
+__MultiTasks__
+
+API:
+
+    grunt.registerMultiTask(taskName, [description, ] taskFunction)
+
+使用示例：
+
+    //  log任务有三种不同的配置
+    grunt.initConfig({
+      log: {
+        foo: [1, 2, 3],
+        bar: 'hello world',
+        baz: false
+      }
+    });
+    
+    //  默认情况下，MultiTasks会依次使用每个配置去执行一遍任务。
+    grunt.registerMultiTask('log', 'Log stuff.', function() {
+      grunt.log.writeln(this.target + ': ' + this.data);
+    });
+    
+__grunt-jsdoc配置__
+
+基本语法：
+
+    grunt.initConfig({
+        jsdoc : {
+            dist : {
+                src: ['src/*.js', 'test/*.js'], 
+                options: {
+                    destination: 'doc'
+                }
+            }
+        }
+    });
+    
+参数说明：
+
++   src: 要自动生成API文档的源文件路径数组
++   jsdoc: jsdoc的bin文件夹目录
++   options: jsdoc单独使用的配置项
+    +   destination： 必填，指定文档输出路径
+    +   configure： jsdoc配置文件路径
+    +   template： 文档模板路径
+    +   private： 是否在文档中输出private成员，默认为true
+    +   更多参数：参考官方文档：[Command-line arguments to JSDoc](http://usejsdoc.org/about-commandline.html)
+    
+###执行任务###
+
+基本语法：
+
+    grunt taskname
+    
+当然，如果你为某一个MultiTasks任务指定一个目标配置，也是可行的。以上面的MultiTasks中提到的作为例子就是：
+
+    //  运行concat任务，同时指定使用foo作为目标配置
+    //  这样在运行的时候，this.data == foo
+    grunt concat:foo
+
+###[JsDoc注解](http://usejsdoc.org/#JSDoc3_Tag_Dictionary)###
+
+####Namepaths in JSDoc 3####
+
+在使用JsDoc之前，首先要了解一个概念就是namepath。本质上讲，namepath是JSDoc注释里明确变量的实例成员，静态成员或者内部成员的机制。
+
+namepath的基本语法示例：
+
+    MyConstructor
+    MyConstructor#instanceMember
+    MyConstructor.staticMember
+    MyConstructor~innerMember
+
+####Tutorials机制####
+
+使用Tutorials机制，你可以对你的Javascript代码做出更加详细的，更加复杂的的DEMO页面。
+
+要启用Tutorials机制，首先你要现指定一个包含tutorials页面的文件夹路径，比如：
+
+    jsdoc: {
+		dev : {
+            src: jsdoc_src, 
+            options: {
+				private    : false,
+				destination: 'dev_release/doc/',
+				tutorials  : 'dev_release/demo'
+            }
+        }
+	}
+
+然后是时候@tutorial注解，并且指定tutorial的ID。具体来说，一个tutorial的ID其实就是文件名。（ e.g. 比如textbox_index.html的tutorialID就是textbox_index ）
+
+    /** 
+	 *	web.textbox
+	 *	文本域
+	 *	@class 		textbox 
+	 *	@memberof 	web
+	 *	@extends 	web.formelement
+	 *	@tutorial	textbox_index
+	 *	@param 		{Object} 	options 	-	控件配置参数
+	 *	@param 		{Object} 	element 	-	dom对象
+	 */
+	control( 'web.textbox', web.formelement, {} )
+
+####各种注解####
+
+__命名空间，模块，类声明，继承__
+
+1.  @class
+
+基本语法：
+
+    @class <SomeClassName>
+    
+DEMO：
+
+    /** 
+	 *	控件基类
+	 *	@class 		control 
+	 *	@param 		{Object} 	options 	-	控件配置参数
+	 *	@param 		{Object} 	element 	-	dom对象
+	 */
+	 function Control( /* options,element */ ){  };
+
+1.  @memberof
+
+定义一个符号属于另外一个父符号，这个注解其实非常好用。在Javascript类型继承其实是比较复杂的事情的，因为我们可以通过编写代码生成类构造函数来实现类的定义和继承。那这个时候，类原型的属性要怎么和类型关联起来呢？就是要通过@memberof这么一个机制实现。
+
+如果是类型的实例成员，那么你可以以这样的语法格式编写注释：**@memberof ClassName.prototype**或者是**@memberof ClassName#**。此外还有第三种方式，就是同时使用@memberof和@instance注解。我个人都是使用第三种方式编写注释。
+
+基本语法：
+
+    @memberof <parentNamepath>
+    
+DEMO：
+
+    /** 
+	 *	web.textbox
+	 *	文本域
+	 *	@class 		textbox 
+	 *	@memberof 	web
+	 *	@extends 	web.formelement
+	 *	@tutorial	textbox_index
+	 *	@param 		{Object} 	options 	-	控件配置参数
+	 *	@param 		{Object} 	element 	-	dom对象
+	 */
+	control( 'web.textbox', web.formelement, {
+	   /**
+		 *	表单控件值
+		 *	@public
+		 *	@instance
+		 *	@memberof 	web.textbox
+		 *	@member		{Object}	value
+		 *	@default 	null
+		 *	@example	<caption>get</caption>
+		 *		var value = ctrl.value();
+		 *	@example	<caption>set</caption>
+		 *		ctrl.value( 'your text value' );
+		 */
+		value : function( val ){ }
+		
+	}）；
+    
+1.  @namespace
+
+基本语法：
+
+    @namespace [[{<type>}] <SomeName>]
+    
+DEMO：
+
+    /**
+     * My namespace.
+     * @namespace
+     */
+    var MyNamespace = {
+        /** documented as MyNamespace.foo */
+        foo: function() {},
+        /** documented as MyNamespace.bar */
+        bar: 1
+    };
+    
+1.  @module
+
+__访问修饰符__
+
+1.  @public
+1.  @private
+1.  @protected
+
+__成员，参数，返回值__
+
+1.  @member
+1.  @method
+1.  @param
+1.  @property
+1.  @static
+1.  @readonly
+1.  @instance
+1.  @virtual
+1.  @return
+1.  @event
+1.  @borrows
+1.  @lends
+
+__其他__
+
+1.  @example
+1.  @todo
+1.  @author
+1.  @file
+1.  @tutorial
+
