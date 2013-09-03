@@ -115,7 +115,6 @@ cgi.fix_pathinfo=0 表示**关闭** PHP 的自动 PATH_INFO 检测。cgi.fix_pat
 ##参考文档##
 
 1.	[How to Install Linux, nginx, MySQL, PHP (LEMP) stack on Ubuntu 12.04](https://www.digitalocean.com/community/articles/how-to-install-linux-nginx-mysql-php-lemp-stack-on-ubuntu-12-04)
-
 2.	[PHP基础教程](http://www.w3school.com.cn/php/)
-
 3.	[PHP 类与对象](http://www.5idev.com/p-php_class_object.shtml)
+5.  [Setup Nginx + php-FPM + apc + MariaDB on Debian 7 – The perfect LEMP server](http://www.binarytides.com/install-nginx-php-fpm-mariadb-debian/)
