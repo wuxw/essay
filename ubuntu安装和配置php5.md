@@ -1,5 +1,3 @@
-#ubuntu安装和配置php5,nginx#
-
 ##安装php5##
 
 在linux下安装PHP简直太容易了，一行命令搞定一切：
@@ -26,34 +24,39 @@
 
 	cgi.fix_pathinfo=0
 
-If this number is kept as 1, the php interpreter will do its best to process the file that is as near to the requested file as possible. This is a possible security risk. If this number is set to 0, conversely, the interpreter will only process the exact file path—a much safer alternative. Save and Exit. 
+cgi.fix_pathinfo=0 表示**关闭** PHP 的自动 PATH_INFO 检测。cgi.fix_pathinfo=1的时候，举个例子，当nginx传给 PHP 的值为 /var/www/lrenwang/test.png/xxx.php的时候，$_SERVER 中 SCRIPT_FILENAME 却是 /var/www/test/test.png。
 
-We need to make another small change in the php5-fpm configuration.Open up www.conf:
+因为/var/www/lrenwang/test.png/xxx.php 并不存在，/var/www/lrenwang/test.png 被 PHP 解析为 SCRIPT_FILENAME，/xxx.php 被 PHP 解析为 PATH_INFO 后被丢弃，因此并没有在 $_SERVER 中出现。当cgi.fix_pathinfo设置为0的时候则不会有此问题。
+
+另外，我们需要检查一下php5-fpm的配置，可能还需要一点小修改。打卡www.conf这个文件:
 
 	 sudo gedit /etc/php5/fpm/pool.d/www.conf
 
-Find the line, **listen = 127.0.0.1:9000**, and change the **127.0.0.1:9000** to **/var/run/php5-fpm.sock**.
+找到**listen = 127.0.0.1:9000**, 把**127.0.0.1:9000**改成**/var/run/php5-fpm.sock**。
 
 	listen = /var/run/php5-fpm.sock
 
-Save and Exit. Restart php-fpm:
+之后重启：
 
 	sudo service php5-fpm restart
 
 >NOTE:我这边安装完php-fpm后，这个listen地址就是正确的了。
 
+>另外，这里稍微提一下FastCGI的运作原理。Nginx不支持对外部程序的直接调用或者解析，所有的外部程序（包括PHP）必须通过FastCGI接口来调用。FastCGI接口在Linux下是socket（这个socket可以是文件socket，也可以是ip socket）。为了调用CGI程序，还需要一个FastCGI的wrapper（wrapper可以理解为用于启动另一个程序的程序），这个wrapper绑定在某个固定socket上，如端口或者文件socket。当Nginx将CGI请求发送给这个socket的时候，通过FastCGI接口，wrapper接收到请求，然后派生出一个新的线程，这个线程调用解释器或者外部程序处理脚本并读取返回数据；接着，wrapper再将返回的数据通过FastCGI接口，沿着固定的socket传递给Nginx；最后，Nginx将返回的数据发送给客户端。这就是Nginx+FastCGI的整个运作过程，如图所示：
+
+>[![FastCGI运作原理](./FastCGI运作原理.jpg)](http://book.51cto.com/art/201202/314840.htm)
+
 ##配置nginx##
 
-Open up the default virtual host file.
+打开默认站点配置文件：
 
 	sudo gedit /etc/nginx/sites-available/default
 
-The configuration should include the changes below (the details of the changes are under the config information):
+修改如下所示，你可以参开:
 
 	server {
         listen   80;
-     
-
+        
         root /usr/share/nginx/www;
         index index.php index.html index.htm;
 
@@ -77,32 +80,35 @@ The configuration should include the changes below (the details of the changes a
                 fastcgi_pass unix:/var/run/php5-fpm.sock;
                 fastcgi_index index.php;
                 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-                include fastcgi_params;
-                
+                include fastcgi_params;  
         }
 
 	}
 
-Here are the details of the changes:
+修改如下:
 
-+	Add index.php to the index line.
-+	Change the server_name from local host to your domain name or IP address (replace the example.com in the configuration)
-+	Change the correct lines in “location ~ \.php$ {“ section
-
-Save and Exit
++	在index这一行添加index.php
++	修改server_name为你的域名或者IP
++	修改 “location ~ \.php$ {“ 配置节
 
 ##测试php页面##
 
-To set this up, first create a new file:
+要测试nginx是否配置成功，我们可以新建一个PHP页面:
 	
 	sudo touch /usr/share/nginx/www/info.php
 	sudo gedit /usr/share/nginx/www/info.php
+	
+输入以下PHP源代码：
 
-Restart nginx
+    <?php
+        phpinfo();
+    ?>
+
+重启nginx：
 
 	sudo service nginx restart
 
-You can see the nginx and php-fpm configuration details by visiting http://youripaddress/info.php
+然后访问http://youripaddress/info.php这个页面查看结果
 
 ![phpinfo](./php5_phpinfo.png)
 
