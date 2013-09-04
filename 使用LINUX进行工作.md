@@ -45,6 +45,16 @@ linux mint是ubuntu的衍生版，单从界面操作角度来看，Linux Mint更
 
 实际上我私人也用Git的。Linux下一般我都是直接使用命令行的。入门的话，我感觉这个[Git Reference](http://gitref.org/)站点不错。
 
+最近试用[meld](http://meldmerge.org/)，这是GIT的一个mergetool，能同时支持多个代码管理系统以及多个系统平台。
+
+![meld](http://meldmerge.org/images/meld-filediff-full.png)
+
+>NOTE:另外一个比较常用的是KDiff3，这个软件看起来也是相当不错的，不过我不经常使用就是了。
+
+GIT代码库的图形化GUI，个人推荐[Cola Git Gui](http://git-cola.github.io/)。
+
+![Cola Git Gui](http://git-cola.github.io/images/dag.png)
+
 ##编辑器##
 
 1.  [Sublime text 2](http://www.sublimetext.com/)
