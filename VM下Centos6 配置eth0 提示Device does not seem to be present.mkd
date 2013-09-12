@@ -1,0 +1,7 @@
+#VM下Centos6 配置eth0 提示Device does not seem to be present#
+
+#CentOS 6.0找不到ifcfg-eth0解决方案#
+
+http://www.cnblogs.com/fbwfbi/archive/2013/04/29/3050907.html
+
+http://liulijun-cn-2011.iteye.com/blog/1177147
