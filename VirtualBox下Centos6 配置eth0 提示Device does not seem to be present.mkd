@@ -1,0 +1,45 @@
+#VirtualBox下Centos6 配置eth0 提示Device does not seem to be present#
+
+##故障现象##
+
+重启网络：
+
+    service network restart
+    
+得到以下提示信息：
+
+    Shutting down loopback insterface:                                                                          [   OK  ]
+    Bringing up loopback insterface:                                                                            [   OK  ]
+    Bringing up interface eth0:  Device eth0 does not seem to be present,delaying initialization.               [   FAILED  ]
+    
+##解决问题的过程##
+    
+运行ifconfig命令查看网卡设备：
+
+    ifconfig -a
+    
+我的到了以下信息：
+
+![ifconfig_-a](./ifconfig_-a.png)
+
+只出现了eth1而没有出现eth0，
+
+然后通过查看虚拟机的网卡配置，我们可以得到网卡的mac地址：
+
+![vbox_mac.png](./vbox_mac.png)
+
+而后通过查看__/etc/sysconfig/network-scripts/__文件夹下的网卡配置:
+
+    ll /etc/sysconfig/network-scripts/ | grep "ifcfg-"
+    
+我发现可以能得到ifcfg-eth0的信息:
+
+![ll_network-scripts.png](./ll_network-scripts.png)
+
+尝试把ifcfg-eth0重命名成ifcfg-eth1，并且把文件里的设备名从eth0改成eth1，之后重启网络，至此，问题搞定。
+
+![service_network_restart.png](./service_network_restart.png)
+    
+##参考文档##
+1.  [Centos 配置eth0 提示Device does not seem to be present](http://www.cnblogs.com/fbwfbi/archive/2013/04/29/3050907.html)
+2.  [CentOS 6.0找不到ifcfg-eth0解决方案](http://liulijun-cn-2011.iteye.com/blog/1177147)
