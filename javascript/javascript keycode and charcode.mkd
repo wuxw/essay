@@ -1,3 +1,0 @@
-[javascript keycode and charcode](http://stackoverflow.com/questions/1444477/keycode-and-charcode)
-
-[JavaScript Madness: Keyboard Events](http://unixpapa.com/js/key.html)

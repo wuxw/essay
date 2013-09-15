@@ -1,7 +1,0 @@
-##JavaScript的Drag和Drop##
-
-参考引用:
-
-1.  [Drag 和 Drop 在 JavaScript 中的使用](https://developer.mozilla.org/en-US/docs/Drag_%E5%92%8C_Drop_%E5%9C%A8_JavaScript_%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8)
-2.  [[原]js拖拽和放置(javascript drag and drop)](http://koyoz.com/blog/?action=show&id=80)
-3.  [JavaScript 拖放效果](http://www.cnblogs.com/cloudgamer/archive/2008/11/17/Drag.html)
