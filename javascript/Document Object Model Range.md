@@ -1,5 +1,7 @@
 Range接口的完整API描述请参考W3C文档[《Document Object Model Range》]([Rnage](http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#Level-2-Range-idl))
 
+>NOTE: 本文中所有的代码示例的完整代码都可以在[Range Demo](./range_demo.html)找到。
+
 ##术语##
 
 ###Position###
@@ -38,9 +40,9 @@ __[DocumentRange](http://www.w3.org/TR/DOM-Level-2-Traversal-Range/ranges.html#L
 	void setStart(in Node parent, in long offset) 
 					raises(RangeException);
 	void setEnd(in Node parent, in long offset)	
-					raises(RangeException);
+					raises(RangeException);    
 
-It is also possible to set a Range's position relative to nodes in the tree:
+当然，还有其他以下方法:
 
 	void setStartBefore(in Node node);
                         	raises(RangeException);
@@ -50,64 +52,188 @@ It is also possible to set a Range's position relative to nodes in the tree:
                       		raises(RangeException);
 	void setEndAfter(in Node node);
                      		raises(RangeException);
+                     		
+示例代码：
 
-A Range can be collapsed to either boundary-point:
+    var range = document.createRange();
+    var id = 'Level-2-Range-introduction-h2';
+    var parent = document.getElementById( id );
+
+    range.setStart( parent,0 );
+    range.setEnd( parent,1 );
+    
+    //  2.1. Introduction
+    console.log( range.toString() );
+
+一个Range对象是可以在两个边界点收缩的:
 	
 	void collapse(in boolean toStart);
 
-Passing TRUE as the parameter toStart will collapse the Range to its start, FALSE to its end.
-
-The following methods can be used to make a Range select the contents of a node or the node itself.
+如果传递的参数是true，那么Range对象会收缩至边界起点，反之则收缩到边界终点。以下方法可以被用来设置Range对象选中Range范围内的节点或者内容。
 
 	void selectNode(in Node n);
 	void selectNodeContents(in Node n);
 
-The following examples demonstrate the operation of the methods selectNode and selectNodeContents:
+抽象示例 : 
 
-	Before:
-	  ^<BAR><FOO>A<MOO>B</MOO>C</FOO></BAR>
-	After Range.selectNodeContents(FOO):
-	  <BAR><FOO>A<MOO>B</MOO>C</FOO></BAR>
-	(In this case, FOO is the parent of both boundary-points)
-	After Range.selectNode(FOO):
+![selectNode && selectNodeContents](./selectNode && selectNodeContents.png)
 	
-	<BAR><FOO>A<MOO>B</MOO>C</FOO></BAR>
+示例代码：
 
-##Comparing Range Boundary-Points##
+    function selectNode_3(){
+
+        var range = document.createRange();
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+
+        console.log( 'selectNode' );
+        range.selectNode( end.getElementsByTagName( 'b' )[0] );
+        var nodes = range.extractContents();
+        console.log( nodes );
+
+        console.log( 'selectNodeContents' );
+        range.selectNodeContents( start );
+        var content = range.extractContents();
+        console.log( content );
+
+    };
 
 ##Deleting Content with a Range##
 
-One can delete the contents selected by a Range with:
+删除Range对象中选中区间的内容有两种，其中一种就是 **deleteContents** 方法:
 
 	void deleteContents();
 
-Some examples : 
+抽象示例 : 
 
-	(1) <FOO>AB<MOO>CD</MOO>CD</FOO>	-->	<FOO>A^CD</FOO>
-	(2) <FOO>A<MOO>BC</MOO>DE</FOO>		-->		<FOO>A<MOO>B</MOO>^E</FOO>
-	(3) <FOO>XY<BAR>ZW</BAR>Q</FOO>		-->		<FOO>X^<BAR>W</BAR>Q</FOO>
-	(4) <FOO><BAR1>AB</BAR1><BAR2/><BAR3>CD</BAR3></FOO>	-->  <FOO><BAR1>A</BAR1>^<BAR3>D</BAR3>
+![deleteContents](./deleteContents.png)
 
-After deleteContents() is invoked on a Range, the Range is collapsed.
+值得注意的是，一旦Range对象的deleteContents方法调用之后，Range对象会立刻collapse。
+
+示例代码：
+
+    function deleteContents_1(){
+
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        var range = document.createRange();
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+        //  select '<h2>2.1.Introduction</h2>'
+        range.selectNodeContents( start );
+        //  delete innerHtml,
+        //  if you open console of chrome and see document,you can still find <h2 id="Level-2-Range-introduction-h2" class="div2"></h2>
+        range.deleteContents();
+        
+    };
 
 ##Extracting Content##
 
-If the contents of a Range need to be extracted rather than deleted, the following method may be used:
+和 **deleteContents** 不同的是，方法 **extractContents** 只是把Range对象选中的内容从DOM树上分离了，也就是detach，并且作为返回值返回：
 
 	 DocumentFragment extractContents();
 
-Some examples : 
+抽象示例 : 
 
-	(1) <FOO>AB<MOO>CD</MOO>CD</FOO>  -->	B<MOO>CD</MOO>
-	(2) <FOO>A<MOO>BC</MOO>DE</FOO>  -->		<MOO>C<MOO>D
-	(3) <FOO>XY<BAR>ZW</BAR>Q</FOO>  -->		Y<BAR>Z</BAR>
-	(4) <FOO><BAR1>AB</BAR1><BAR2/><BAR3>CD</BAR3></FOO> -->		<BAR1>B</BAR1><BAR2/><BAR3>C</BAR3>
+![extractContents](./extractContents.png)
+
+示例代码：
+	
+	function extractContents_1(){
+
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        var range = document.createRange();
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+        //  select '<h2>2.1.Introduction</h2>'
+        range.selectNodeContents( start );
+        //  delete innerHtml,
+        //  if you open console of chrome and see document,you can still find <h2 id="Level-2-Range-introduction-h2" class="div2"></h2>
+        var nodes = range.extractContents();
+
+        console.log( nodes );
+        
+    };
 
 ##Cloning Content##
 
+Range对象选中的内容可以被复制下来：
+
+    DocumentFragment cloneContents();
+
 ##Inserting Content##
 
+如果要在一个Range对象选中的内容插入新的内容，可以使用以下方法：
+
+    void insertNode(in Node n) raises(RangeException);
+    
+示例代码：
+
+    function insertNode_1(){
+
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        var range = document.createRange();
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+        //  select '<h2>2.1.Introduction</h2>'
+        range.selectNodeContents( start );
+        //  delete innerHtml,
+        //  if you open console of chrome and see document,you can still find <h2 id="Level-2-Range-introduction-h2" class="div2"></h2>
+        range.deleteContents();
+
+        var textNode = document.createTextNode();
+        textNode.textContent = '2.1.Introduction';
+        range.insertNode( textNode );
+
+    };
+
 ##Surrounding Content##
+
+方法 **surroundContents** 其实就像是jQuery的wrap方法，也即是在Range对象选中的内容外面包装一个新的节点：
+
+    void surroundContents(in Node newParent);
+    
+示例代码 ： 
+
+    function surroundContents_1(){
+
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        var range = document.createRange();
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+        //  select '<h2>2.1.Introduction</h2>'
+        range.selectNodeContents( start );
+        //  delete innerHtml,
+        //  if you open console of chrome and see document,you can still find <h2 id="Level-2-Range-introduction-h2" class="div2"></h2>
+
+        //var textNode = document.createTextNode();
+        //textNode.textContent = '2.1.Introduction';
+        //range.insertNode( textNode );
+        var span = document.createElement( 'span' );
+        //<h2 id="Level-2-Range-introduction-h2" class="div2"><span>2.1.Introduction</span></h2>
+        range.surroundContents(span);
+
+    };
 
 ##Range modification under document mutation##
 
