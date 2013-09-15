@@ -1,0 +1,264 @@
+## [译]ECMAScript 5 严格模式, JSON等新特性 ##
+
+**原文：[ECMAScript 5 Strict Mode, JSON, and More](http://ejohn.org/blog/ecmascript-5-strict-mode-json-and-more/)**
+
+之前我分析了ECMAScript 5′s的Object和Property系统。这是语言发展的一个新的方向并且值得重点关注。
+
+同时，ECMAScript 5也增加了其他许多值得关注的新特性以及API。其中最大的改变就是引入了严格模式以及原生的JSON支持。
+
+### 严格模式（Strict Mode） ###
+
+ECMAScript 5的严格模式是一个新特性，严格模式允许你整个脚本或者某一个函数运行在一个“严格”上下文中。“严格”上下文阻止特定的行为并且抛出异常（该模式下一般会反馈给用户更多的异常信息）。
+
+ECMAScript 5向后兼容ECMAScript 3，所有在ECMAScript 3里不赞成使用的特性，在严格模式下，都将被禁用（或者直接抛出异常）。
+
+严格模式带来了以下几个方面的好处：
+
+*	捕捉了几个常见的编码陷阱，并且抛出异常
+*	阻止对于相对比较不安全的代码运行或者抛出异常
+*	禁止令人疑惑，或者考虑不够周全的语言特性
+
+更多关于严格模式的详细信息，请参考[ES5标准文档](http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf)的第235页。
+
+值得注意的是，ECMAScript 5的严格模式和[火狐浏览器的严格模式](https://developer.mozilla.org/zh-CN/docs/Mozilla/Preferences/Preference_reference/javascript.options.strict)是不同的（你可以在火狐浏览器的地址栏上输入about:config，进入配置页面，设置javascript.options.strict选项来启用浏览器的严格模式）。ES5的严格模式阻止一系列不同的潜在错误（而火狐浏览器仅仅只是尝试强制实施某些优秀的实践。）
+
+**如何使用严格模式？**
+
+很简单。在程序的开头添加如下代码就能启用严格模式：
+
+	"use strict";
+
+或者可以把它添加在函数顶部，只在函数范围内启用严格模式。
+
+	function imStrict(){
+	  "use strict";
+	  // ... your code ...
+	}
+
+这里没有使用任何新语法来启用严格模式，只是简单的添加一个“use strict”字符串。这意味着你可以在你的脚本里使用严格模式并且不会对旧版本浏览器有任何影响，旧版浏览器会安全地忽视。
+
+ECMAScript 5几乎没有引入任何新的语法。这意味着在某种程度上你可以编写支持优雅降级的ES5脚本——这在ES4是无法支持的。ES5严格模式的启用方式，就是优雅降级的一个很好的例子。
+
+有一个优雅的方法可以在不影响外部代码的情况下使整个javascript库运行在严格模式下：
+
+	// Non-strict code...
+ 
+	(function(){
+  	  "use strict";
+ 
+  	  // Define your library strictly...
+	})();
+ 
+	// Non-strict code...
+
+很多的javascript库使用上面的方式（也就是闭包啦）进行编写，这样的写法能很容易用上严格模式带来的好处。
+
+那么当你启用了严格模式之后都会有那些改变呢？
+
+**变量和属性**
+
+尝试给未定义的变量进行赋值操作，比如：foo = "bar" 将会失败。之前版本的ES会自动将该属性定义在全局对象之下（比如window.foo），现在运行时则会抛出异常。这一改变明显地避免了一些烦人的BUG。
+
+尝试给元数据writable配置为false的属性赋值，删除元数据configurable设置为false的属性，或者给元数据extensible设置为false的对象添加新属性都将导致错误（关于属性的元数据如何配置等，请参考[ECMAScript 5 Objects and Properties](http://ejohn.org/blog/ecmascript-5-objects-and-properties/)一文）。
+
+删除变量，函数或者参数都将导致错误。
+
+	var foo = "test";
+	function test(){}
+ 
+	delete foo; // Error
+	delete test; // Error
+ 
+	function test2(arg) {
+    	  delete arg; // Error
+	}
+
+在对象直接量里重复定义属性，运行时将会抛出异常
+
+	// Error
+	{ foo: true, foo: false }
+
+**eval**
+
+事实上，任何使用‘eval’这一关键字的方式都是被禁止的——比如把‘eval’函数赋值到一个变量上或者作为一个对象的属性的名字。
+
+	// All generate errors...
+	obj.eval = ...
+	obj.foo = eval;
+	var eval = ...;
+	for ( var eval in ... ) {}
+	function eval(){}
+	function test(eval){}
+	function(eval){}
+	new Function("eval")
+
+另外，严格模式下无法通过eval函数引入新的全局变量。
+
+	eval("var a = false;");
+	print( typeof a ); // undefined
+
+**Functions**
+
+重写arguments对象将会导致错误:
+
+	arguments = [...]; // not allowed
+
+重复定义参数也会导致错误，比如：
+
+	function( foo, foo ) {}
+
+严格模式下访问arguments.caller和arguments.callee运行时会抛出异常。因此如果你要引用匿名函数，你必须命名该函数，比如像这样做：
+
+	setTimeout(function later(){
+	  // do stuff...
+	  setTimeout( later, 1000 );
+	}, 1000 );
+
+严格模式会移除内嵌函数的arguments以及caller属性，当然，你也无法定义这两个属性。
+
+	function test(){
+	  function inner(){
+	    // Don't exist, either
+	    test.arguments = ...; // Error
+	    inner.caller = ...; // Error
+	  }
+	}
+
+最后，一个由来已久（并且非常烦人）的BUG，使用null或者undefined作为Function.prototype.call或Function.prototype.apply方法的第一个参数时，函数内部的this将会指向全局对象。严格模式阻止这一行为并且抛出异常：
+
+	(function(){ ... }).call( null ); // Exception
+
+**with(){}**
+
+严格模式下with语句是无法使用的——实际上如果你在严格模式下使用with语句，运行时会抛出语法错误。
+
+ECMAScript 5严格模式带来了很多运行时行为的改变（加强了语言的风格偏好，比如移除with语句；修复遗留的语言层面的陷阱，比如可以在对象直接量里重复定义属性）。开发者们如何开始接受这些改变并且这些改变最终如何影响到JavaScript的开发将会是一件非常有趣的事情。
+
+### JSON ###
+
+ES 5第二个主要的语言特性就是原生JSON支持。我非常高兴这一特性终于成为了标准的一部分。
+
+与此同时，请着手开始把你使用JSON的程序迁移到[Crockford](http://en.wikipedia.org/wiki/Douglas_Crockford)的[json2.js](https://github.com/douglascrockford/JSON-js)上。json2.js完全支持ES 5的标准并且在没有原生支持的时候还可以优雅降级。
+
+JSON对象有两个主要的方法：JSON.parse（把JSON字符串反序列化为JavaScript对象）和JSON.stringify（将JavaScript对象序列化成为JSON字符串）。
+
+JSON.parse( text )
+
+JSON字符串反序列化为JavaScript对象。
+
+	var obj = JSON.parse('{"name":"John"}');
+	// Prints 'John'
+	print( obj.name );
+	JSON.parse( text, translate )
+
+这个方法支持传入一个反序列化函数以自定义反序列化或者移除对象属性。
+
+	function translate(key, value) {
+	  if ( key === "name" ) {
+	    return value + " Resig";
+	  }
+	}
+ 
+	var obj = JSON.parse('{"name":"John","last":"Resig"}', translate);
+	// Prints 'John Resig'
+	print( obj.name );
+ 
+	// Undefined
+	print( obj.last );
+	JSON.stringify( obj )
+
+把JavaScript对象序列化成为JSON字符串。
+
+	var str = JSON.stringify({ name: "John" });
+	// Prints {"name":"John"}
+	print( str );
+	JSON.stringify( obj, ["white", "list"])
+
+指定需要进行序列化的对象属性列表进行序列化。
+
+	var list = ["name"];
+	var str = JSON.stringify({name: "John", last: "Resig"}, list);
+	// Prints {"name":"John"}
+	print( str );
+	JSON.stringify( obj, translate )
+
+使用自定义的序列化函数序列化对象。
+
+	function translate(key, value) {
+	  if ( key === "name" ) {
+	    return value + " Resig";
+	  }
+	}
+ 
+	var str = JSON.stringify({"name":"John","last":"Resig"}, translate);
+	// Prints {"name":"John Resig"}
+	print( str );
+	JSON.stringify( obj, null, 2 )
+
+添加指定的空格数量作为分隔符到序列化结果上。
+
+	var str = JSON.stringify({ name: "John" }, null, 2);
+	// Prints:
+	// {
+	//   "name": "John"
+	// }
+	print( str );
+	JSON.stringify( obj, null, "\t" )
+
+使用其他的字符串作为分隔符。
+
+	var str = JSON.stringify({ name: "John" }, null, "\t");
+	// Prints:
+	// {\n\t"name": "John"\n}
+	print( str );
+
+另外还有一些新的方法添加到了语言的基本类型上，不过坦白讲，这些新方法并不是那么有趣。调用String, Boolean, 和Number对象的valueOf方法可以直接获得对象的原始值，而Date的valueOf则返回和toISOString方法一样的结果。
+
+	// Yawn...
+	String.prototype.toJSON
+	Boolean.prototype.toJSON
+	Number.prototype.toJSON
+	Date.prototype.toJSON
+
+### .bind() ###
+
+Function.prototype.bind(thisArg, arg1, arg2....)
+
+新添加到语言Function对象的bind方法会创建一个新函数,称为绑定函数。当调用这个绑定函数时,绑定函数会以创建它时传入bind方法的第一个参数作为this,传入bind方法的第二个以及以后的参数加上绑定函数运行时本身的参数按照顺序作为原函数的参数来调用原函数。
+
+	var obj = {
+	  method: function(name){
+	    this.name = name;
+	  }
+	};
+ 
+	setTimeout( obj.method.bind(obj, "John"), 100 );
+
+### Date ###
+现在可以使用ISO时间格式字符串初始化Date实例和将Date对象输出为ISO时间格式字符串。
+
+Date对象构造器首先尝试使用ISO时间格式去转换日期字符串，然后再尝试使用其他的Date可接受的输入进行转换。
+
+Date对象新增了一个toISOString方法，输出ISO日期格式的字符串。
+
+	var date = new Date("2009-05-21T16:06:05.000Z");
+ 
+	// Prints 2009-05-21T16:06:05.000Z
+	print( date.toISOString() );
+
+### .trim() ###
+
+string原生支持trim方法，Steven Levithan对[trim方法](http://blog.stevenlevithan.com/archives/faster-trim-javascript)有深入的分析。
+
+### Array ###
+
+[JavaScript Array对象的拓展方法](https://developer.mozilla.org/en-US/docs/JavaScript/New_in_JavaScript/1.6?redirectlocale=en-US&redirectslug=New_in_JavaScript_1.6#Array_extras)已经存在了很久了，终于成为了标准文档的一部分了。标准文档对Array对象新添加的拓展方法有：indexOf，lastIndexOf，every，some，forEach，map，filter，reduce，and reduceRight。
+
+此外，标准添加了Array.isArray这一方法，用于判断一个对象是否是数组对象，提供的功能与以下代码非常相似：
+
+	Array.isArray = function( array ) {
+	  return Object.prototype.toString.call( array ) === "[object Array]";
+	};
+
+我想所有的这一切新特性令ES5成了一个非常有趣的包。它不像ES4承诺的那样的超前，规模庞大，但也提供了数量相当可观的更新，减少了明显的BUG数量，使语言本身更加安全高效。
+

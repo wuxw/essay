@@ -1,0 +1,197 @@
+##DOM Level 2 Style##
+
+###简介###
+
+DOM 2引入了样式模块，提供了语言无关的API标准设计。这些API允许程序和脚本动态访问和修改文档的样式。DOM 2这个模块依赖于[Document Object Model Level 2 Core](http://www.w3.org/TR/2000/REC-DOM-Level-2-Core-20001113/)以及[Document Object Model Level 2 Views](http://www.w3.org/TR/2000/REC-DOM-Level-2-Views-20001113/)。
+
+模块一共包含两个子模块，分别是本博文分享的内容和[DOM Level 2 Style Sheets]()——定义了样式表的抽象接口。
+
+###基本接口###
+
+####[CSSStyleDeclaration](http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html#CSS-CSSStyleDeclaration "CSSStyleDeclaration")####
+
+CSSStyleDeclaration表示一个[CSS样式声明代码块](http://www.w3.org/TR/1998/REC-CSS2-19980512/syndata.html#block)。CSSStyleDeclaration是一个类数组。这个类数组的每一个项是CSS属性名（ e.g. 'background-color' )。你可以通过下标访问这个数组中的值。
+
+    // Introduced in DOM Level 2:
+    interface CSSStyleDeclaration {
+               attribute DOMString        cssText;
+                                            // raises(DOMException) on setting
+    
+      DOMString          getPropertyValue(in DOMString propertyName);
+      CSSValue           getPropertyCSSValue(in DOMString propertyName);
+      DOMString          removeProperty(in DOMString propertyName);
+      DOMString          getPropertyPriority(in DOMString propertyName);
+      void               setProperty(in DOMString propertyName, 
+                                     in DOMString value, 
+                                     in DOMString priority);
+      readonly attribute unsigned long    length;
+      DOMString          item(in unsigned long index);
+      readonly attribute CSSRule          parentRule;
+    };
+    
+示例代码：
+    
+    var desc = document.defaultView.getComputedStyle( document.getElementById( 'navbar' ) );
+    //  273
+    console.log( desc.length );
+    //  "background-attachment"
+    console.log( desc[0] );
+    //  返回一个CSSPrimitiveValue对象实例: {primitiveType: 25, cssValueType: 1, cssText: "rgb(0, 0, 0)", setFloatValue: function, getFloatValue: function…}
+    desc.getPropertyCSSValue( 'color' );
+    //  "rgb(0, 0, 0)"，这样访问也行？而且还是直接返回cssText的值了
+    desc['color']
+
+####[CSSStyleSheet](http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html#CSS-CSSStyleSheet)####
+
+CSSStyleSheet接口拓展了[DOM Level 2 Style Sheets]()定义的[StyleSheet](http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/stylesheets.html#StyleSheets-fundamental)接口。
+
+__insertRule__
+
+    unsigned long      insertRule(in DOMString rule, in unsigned long index)
+
+向样式表规则集合的指定位置插入一条新的CSS规则，并且返回新添加的规则的索引编号。
+
+    var sheets = document.styleSheets;
+    var s = sheets[0];
+    //  显示所有的CSS规则
+    console.log( s.cssRules );
+    //  在样式表DOM对象的最前面插入一条信的CSS规则
+    s.insertRule( '#t { color : red; }' )；
+    //  显示所有的CSS规则
+    console.log( s.cssRules );
+    
+__deleteRule__ 
+
+    void               deleteRule(in unsigned long index)
+    
+从样式表规则集合移除CSS规则
+
+    var sheets = document.styleSheets;
+    var s = sheets[0];
+    //  显示所有的CSS规则
+    console.log( s.cssRules );
+    //  在样式表DOM对象的最前面插入一条信的CSS规则
+    s.deleteRule( 0 )；
+    //  显示所有的CSS规则
+    console.log( s.cssRules );
+    
+####[CSSRule](http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html#CSS-CSSRule)####
+
+CSSRule是所有CSS规则对象的父类。这个父类规定了若干规则类型的枚举，以及一些公共只读属性。
+
+    interface CSSRule {
+        readonly attribute unsigned short   type;
+        readonly attribute DOMString        cssText;
+        readonly attribute CSSStyleSheet    parentStyleSheet;
+        readonly attribute CSSRule          parentRule;
+    }
+
+__RuleType__
+
+    UNKNOWN_RULE                   = 0
+    STYLE_RULE                     = 1
+    CHARSET_RULE                   = 2
+    IMPORT_RULE                    = 3
+    MEDIA_RULE                     = 4
+    FONT_FACE_RULE                 = 5
+    PAGE_RULE                      = 6
+    
+__cssText__
+
+CSS规则的文本表示。
+
+    var sheets = document.styleSheets;
+    var s = sheets[0];
+    //  显示CSS规则的cssText
+    //  example : h4 { text-align: left; font-family: sans-serif; font-weight: normal; color: rgb(0, 80, 178); }
+    console.log( s.cssRules[0].cssText );
+    
+__parentStyleSheet__
+
+指向包含该CSS规则的样式表对象。
+
+    var sheets = document.styleSheets;
+    var s = sheets[0];
+    //  true
+    console.log( s.cssRules[0].parentStyleSheet == s );
+
+__parentRule__
+
+如果该CSS规则是一条内嵌的规则（ 比如@media块定义的规则 ），parentRule指向内嵌这条规则的CSS规则。
+
+    var sheets = document.styleSheets;
+    //  s的URL地址http://www.w3.org/StyleSheets/TR/W3C-REC.css
+    var s = sheets[1];
+    //  @media
+    var mediaRule = s.cssRules[6];
+    var subRule = mediaRule.cssRules[0];
+    //  true
+    console.log( subRule.parentRule == mediaRule );
+    
+####[CSSStyleRule](http://www.w3.org/TR/2000/REC-DOM-Level-2-Style-20001113/css.html#CSS-CSSStyleRule)####
+
+    interface CSSStyleRule : CSSRule {
+        attribute DOMString        selectorText;
+        readonly attribute CSSStyleDeclaration  style;
+    };
+    
+__selectorText__
+
+CSS选择器。
+
+    var sheets = document.styleSheets;
+    //  s的URL地址http://www.w3.org/StyleSheets/TR/W3C-REC.css
+    var s = sheets[1];
+    //  @media
+    var mediaRule = s.cssRules[6];
+    var subRule = mediaRule.cssRules[0];
+    //  "a img"
+    console.log( subRule.selectorText );
+
+__style__
+
+只读属性。这个属性是一个CSSStyleDeclaration对象实例。
+
+    var sheets = document.styleSheets;
+    //  s的URL地址http://www.w3.org/StyleSheets/TR/W3C-REC.css
+    var s = sheets[1];
+    //  @media
+    var mediaRule = s.cssRules[6];
+    var subRule = mediaRule.cssRules[0];
+    //  1
+    console.log( subRule.style.length );
+    //  "inherit"
+    console.log( subRule.style.color );
+    //  "inherit"
+    console.log( subRule.style['color'] );
+    
+###Element内联样式###
+
+内联样式没什么好说的了，简单的说就是我们在HTML标签中指定的样式配置。
+
+    var navbar = document.getElementById( 'navbar' );
+    //  CSSStyleDeclaration对象实例
+    console.log( navbar.style );
+    
+###CSS样式最终应用的结果值###
+
+W3C标准定义了这么一个接口：ViewCSS，其定义如下：
+
+    //  var style = document.defaultView.getComputedStyle("元素", "伪类");
+    //  e.g. var style = document.defaultView.getComputedStyle( document.getElementById("test") , ":after");
+    interface ViewCSS : views::AbstractView {
+        CSSStyleDeclaration getComputedStyle(in Element elt,in DOMString pseudoElt);
+    };
+    
+和dom element对象的style属性不同，这个getComputedStyle方法只能用来读取最终应用在元素上的所有CSS属性对象，并不能设置元素对象的样式。而style属性是可读可写的。
+
+    var desc = document.defaultView.getComputedStyle( document.getElementById( 'navbar' ) );
+    //  273
+    console.log( desc.length );
+    //  "background-attachment"
+    console.log( desc[0] );
+    //  返回一个CSSPrimitiveValue对象实例: {primitiveType: 25, cssValueType: 1, cssText: "rgb(0, 0, 0)", setFloatValue: function, getFloatValue: function…}
+    desc.getPropertyCSSValue( 'color' );
+    //  "rgb(0, 0, 0)"，这样访问也行？而且还是直接返回cssText的值了
+    desc['color']
+    

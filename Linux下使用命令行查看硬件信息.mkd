@@ -1,0 +1,77 @@
+原文地址：[Linux 用命令行查看硬件信息](http://wowubuntu.com/hardware-info.html)
+
+##proc##
+
+    cat /proc/cpuinfo
+    #查看CPU信息，内容很全哦！
+    
+    cat /proc/meminfo
+    #查看内存信息。
+    
+    cat /proc/ioports
+    #查看IO端口
+    
+    cat /proc/swaps
+    #查看交换分区信息(/proc)
+    
+    cat /proc/interrupts
+    #中断信息
+    
+    cat /proc/partitions
+    #查看磁盘分区
+    
+    cat /proc/bus/usb/devices
+    #查看USB设备
+    
+    cat /proc/bus/input/devices
+    #查看输入设备：键盘鼠标
+    
+    cat /proc/bus/pci/devices
+    #查看PCI设备
+    
+    cat /proc/loadavg
+    #查看系统负载
+    
+    cat /var/log/demsg
+    #查看开机检查的硬件，可以使用grep过虑：eth,cpu,mem,pci,usb,vga,sda……
+    
+##终端命令行##
+
+    lscpu
+    #查看CPU信息
+    
+    lspci
+    #查看PCI设备
+    
+    lsusb
+    #查看USB设备
+    
+    vmstat
+    #报告虚拟内存统计信息
+    
+    fdisk -l
+    #查看分区信息
+    
+    hdparm -i /dev/sda
+    #查看磁盘参数
+    
+    df -h
+    #查看磁盘分信息
+    
+    dmidecode
+    #读取系统DMI表来显示硬件和BIOS信息。
+    
+    lsmod
+    #当前加载的驱动
+    
+    dmesg
+    #查看开机检查的硬件，可以使用grep过虑：eth,cpu,mem,pci,usb,vga,sda……
+    
+    uptime
+    #查看系统负载
+    
+>NOTE:  后续会进一步去看看dmidecode这个工具，关于这个工具，网络上有人做过总结：[（总结）Linux下获取详细硬件信息的工具：Dmidecode命令详解](http://www.ha97.com/4120.html)  
+    
+##其他软件##
+
+[linux Webmin](http://www.webmin.com/)

@@ -1,0 +1,316 @@
+**原文：[ECMAScript 5 Objects and Properties](http://ejohn.org/blog/ecmascript-5-objects-and-properties/)**
+
+ECMAScript 5正在走在它向前发展的道路上。虽然ECMAScript 4被取消了，但在兼容于ECMAScript 3语法的前提下，ES4里可以实现的特性被整合成ECMAScript 3.1，随后ES 3.1又被重命名成ECMAScript 5（更多详细信息请参考[这篇WIKI](http://en.wikipedia.org/wiki/ECMAScript#ECMAScript.2C_5th_Edition)）。
+
+ES5添加了许多新的API，但其中最有趣应该是Object/Property提供的新功能。这些新功能使你可以在运行时动态影响到其他开发者的代码与你的对象之间的交互方式，允许你提供getter以及setter属性访问器，阻止for...in枚举对象属性，修改，删除甚至能禁止添加新的属性到你的对象上。简单来说，就是你可以通过JavaScript本身对那基于JavaScript构建的API进行复制和拓展。
+
+###Objects###
+
+ES5的一个新特性就是对象的可拓展性是可以控制的。关闭对象的可拓展性可以禁止新属性添加到对象上。
+
+ES5提供了两个方法修改和验证对象的可拓展性。
+
+	Object.preventExtensions( obj )
+
+	Object.isExtensible( obj )
+
+preventExtensions方法锁住对象并且禁止以后添加新属性到对象上。isExtensible则可以用来验证当前对象是否可以进行拓展。
+
+**使用示例：**
+
+	var obj = {};
+ 
+	obj.name = "John";
+	print( obj.name );
+	// John
+ 
+	print( Object.isExtensible( obj ) );
+	// true
+ 
+	Object.preventExtensions( obj );
+ 
+	obj.url = "http://ejohn.org/"; // Exception in strict mode
+ 
+	print( Object.isExtensible( obj ) );
+	// false
+
+###Properties and Descriptors###
+
+javascript的属性系统已经被广大开发者详尽的研究过了。属性已经不再是简单的值和对象之间的关联——现在你可以完全控制属性的行为了,尽管这一特性给开发带来了一些复杂性。
+
+对象的属性系统现在分成了两个部分，一个属性的值有两种可能：值，也就是数据属性；或者是一个Getter和Setter（访问器属性——我们可以从现代浏览器知道这一概念，比如Gecko和Webkit）。
+
+*	值。包含了属性对应的数据。
+*	Get访问器。 访问对象属性值的时候，Get方法将会被调用。
+*	Set访问器。 当修改对象属性值的时候，Set方法将会被调用。
+
+另外，属性也可以是：
+
+*	Writable. 如果Writable为false的话，对应属性的值不可变。
+*	Configurable。如果Configurable为false的话，任何删除属性或者修改属性元数据（Writable, Configurable, 或者Enumerable）都会失败。
+*	Enumerable. 如果Enumerable为true，则属性可以在for..in循环里枚举。
+
+上述的特性，Getter，Setter以及Writable等合在一起构成了属性描述。一个简单的属性描述如下所示：
+
+	{
+	  value: "test",
+	  writable: true,
+	  enumerable: true,
+	  configurable: true
+	}
+
+其中那三个属性（writable, enumerable, 和 configurable）都是可选参数，并且默认值都是true。因此，对于属性描述，你需要提供的要么是数据类型的值，不然就是get或者set方法了。
+
+通过调用Object.getOwnPropertyDescriptor这个新的方法，你可以获取对象已经存在的属性的属性描述。
+
+**	Object.getOwnPropertyDescriptor( obj, prop )**
+
+这个方法允许你访问属性的属性描述。同时这也是访问属性描述的唯一方法（因为属性描述并非以可访问的形式存储在属性上，而是由ECMAScript运行时内部维护）。
+
+**代码示例：**
+
+	var obj = { foo: "test" };
+ 
+	print(JSON.stringify(
+	  Object.getOwnPropertyDescriptor( obj, "foo" )
+	));
+	// {"value": "test", "writable": true,
+	//  "enumerable": true, "configurable": true}
+
+**	Object.defineProperty( obj, prop, desc )**
+
+通过defineProperty方法，你可以给对象定义一个新的属性（或者修改属性的属性描述）。这个方法接受一个属性描述对象作为参数初始化或者更新属性。
+
+**使用示例：**
+
+	var obj = {};
+ 
+	Object.defineProperty( obj, "value", {
+	  value: true,
+	  writable: false,
+	  enumerable: true,
+	  configurable: true
+	});
+ 
+	(function(){
+	  var name = "John";
+ 
+	  Object.defineProperty( obj, "name", {
+	    get: function(){ return name; },
+	    set: function(value){ name = value; }
+	  });
+	})();
+ 
+	print( obj.value )
+	// true
+ 
+	print( obj.name );
+	// John
+ 
+	obj.name = "Ted";
+	print( obj.name );
+	// Ted
+ 
+	for ( var prop in obj ) {
+	  print( prop );
+	}
+	// value
+	// name
+ 
+	obj.value = false; // Exception if in strict mode
+ 
+	Object.defineProperty( obj, "value", {
+	  writable: true,
+	  configurable: false
+	});
+ 
+	obj.value = false;
+	print( obj.value );
+	// false
+ 
+	delete obj.value; // Exception
+
+Object.defineProperty是新版本ECMAScript的一个核心的方法。事实上其他主要的特性都依赖于这个方法的存在。
+
+**	Object.defineProperties( obj, props )**
+
+这是同时定义复数个属性的一个方法。
+
+**示例实现：**
+
+	Object.defineProperties = function( obj, props ) {
+	  for ( var prop in props ) {
+	    Object.defineProperty( obj, prop, props[prop] );
+	  }
+	};
+
+**使用示例：**
+
+	var obj = {};
+ 
+	Object.defineProperties(obj, {
+	  "value": {
+	    value: true,
+	    writable: false
+	  },
+	  "name": {
+	    value: "John",
+	    writable: false
+	  }
+	});
+
+
+Property descriptors (and their associated methods) is probably the most important new feature of ECMAScript 5. It gives developers the ability to have fine-grained control of their objects, prevent undesired tinkering, and maintaining a unified web-compatible API.
+
+属性描述（以及和属性描述相关的方法）可能是ES 5最重要的特性，没有之一。这些特性给与了开发者从细粒度上控制对象的能力，维护了一个统一的API。
+
+###新特性###
+
+ES5添加了若干建立在上面介绍的几个特性之上的新特性，下面介绍的两个新方法对于获取对象属性集合是非常实用的。
+
+**	Object.keys( obj )**
+
+这个方法返回对象所有可枚举属性的属性名列表。
+
+**示例实现：**
+
+	Object.keys = function( obj ) {
+	  var array = new Array();
+	  for ( var prop in obj ) {
+	    if ( obj.hasOwnProperty( prop ) ) {
+	      array.push( prop );
+	    }
+	  }
+	  return array;
+	};
+
+**使用示例：**
+
+	var obj = { name: "John", url: "http://ejohn.org/" };
+	print( Object.keys(obj).join(", ") );
+	// name, url
+
+**	Object.getOwnPropertyNames( obj )**
+
+Object.getOwnPropertyNames和Object.keys几乎一样，但不同的是，Object.keys方法会输出所有可枚举属性的属性名，而Object.getOwnPropertyNames方法会输出对象所有属性的属性名而不仅仅只是可枚举属性。因此这两个方法在输出结果和实际用途上还是有所区别的。
+
+**	Object.create( proto, props )**
+
+以proto参数指定的对象作为原型，props作为对象属性，函数内部通过调用Object.defineProperties方法定义对象属性，创建并且返回新的对象。
+
+这个方法的一个简单的实现如下所示（需要bject.defineProperties这个标准新添加的方法）。
+
+**示例实现：(by Ben Newman)**
+
+	Object.create = function( proto, props ) {
+	  var ctor = function( ps ) {
+	    if ( ps )
+	      Object.defineProperties( this, ps );
+	  };
+	  ctor.prototype = proto;
+	  return new ctor( props );
+	};
+
+**其他实现示例：**
+
+	Object.create = function( proto, props ) {
+	  var obj = new Object();
+	  obj.__proto__ = proto;
+ 
+	  if ( typeof props !== "undefined" ) {
+	    Object.defineProperties( obj, props );
+	  }
+ 
+	  return obj;
+	};
+
+> 注意：上面这段示例实现使用了Mozilla内部的\__proto\__属性。通过这个属性你可以访问对象内部的原型对象——你可以可以对这个原型对象进行赋值操作。ES5的Object.getPrototypeOf允许你访问这个内部原型对象，但你却无法进行修改——因此上述方法其实可以实现地更通用一点。
+
+> 早前我曾经写博可讨论过[Object.getPrototypeOf](http://ejohn.org/blog/objectgetprototypeof/)这个方法，我不介意多讨论下这一方法。
+
+**使用示例：**
+
+	function User(){}
+	User.prototype.name = "Anonymous";
+	User.prototype.url = "http://google.com/";
+ 
+	var john = Object.create(new User(), {
+	  name: { value: "John", writable: false },
+	  url: { value: "http://google.com/" }
+	});
+ 
+	print( john.name );
+	// John
+ 
+	john.name = "Ted"; // Exception if in strict mode
+
+**	Object.seal( obj )**
+**	Object.isSealed( obj )**
+
+密闭一个对象可以禁止通过代码去删除，修改任何属性的属性描述，或者是给对象添加新的属性。
+
+**示例实现：**
+
+	Object.seal = function( obj ) {
+	  var props = Object.getOwnPropertyNames( obj );
+ 
+	  for ( var i = 0; i < props.length; i++ ) {
+	    var desc = Object.getOwnPropertyDescriptor( obj, props[i] );
+   
+	    desc.configurable = false;
+	    Object.defineProperty( obj, props[i], desc );
+	  }
+ 
+	  return Object.preventExtensions( obj );
+	};
+
+当你不想其他人给你的对象添加或者删除属性，同时又允许他人修改对象属性值，这时候你可以密闭你的对象。
+
+**	Object.freeze( obj )**
+**	Object.isFrozen( obj )**
+
+冻结一个对象和密闭对一个对象几乎是完全相同的事情，唯一的区别就是冻结使得对象的属性值不能被修改，而密闭对象后，对象的属性值依然能被修改。
+
+**示例实现：**
+
+	Object.freeze = function( obj ) {
+	  var props = Object.getOwnPropertyNames( obj );
+ 
+	  for ( var i = 0; i < props.length; i++ ) {
+	    var desc = Object.getOwnPropertyDescriptor( obj, props[i] );
+   
+	    if ( "value" in desc ) {
+	      desc.writable = false;
+	    }
+   
+	    desc.configurable = false;
+	    Object.defineProperty( obj, props[i], desc );
+	  }
+ 
+	  return Object.preventExtensions( obj );
+	};
+
+冻结其实就是给对象上锁的终极形式。一旦一个对象被冻结，那就再也不能解冻了——也无法以任何形式去修改这个对象。这是令你对象保持不变的最佳方式。
+
+PS：writable, enumerable, 和 configurable这三个属性描述的默认值，应该是false，这是我编写DEMO的时候发现的，以下是代码：
+
+	(function(){
+
+	function User(){}
+	User.prototype.name = "Anonymous";
+	User.prototype.url = "http://google.com/";
+	 
+	var john = Object.create(new User(), {
+	  name: { value: "John" },
+	  url: { value: "http://google.com/" }
+	});
+	 
+	console.log( john.name );// John
+	console.log( Object.getOwnPropertyDescriptor( john,'name' ) );
+	// Object {value: "John", writable: false, enumerable: false, configurable: false}
+	Object.defineProperty( john,'test',{ value : 'hou jianbo' } );
+	Object.seal( john );
+	john.name = 'monkey';
+	console.log( john.name );console.log( john.test );
+
+	})();

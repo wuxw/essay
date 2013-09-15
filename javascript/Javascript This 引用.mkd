@@ -1,0 +1,5 @@
+##Javascript This指针##
+
+http://www.ruanyifeng.com/blog/2010/04/using_this_keyword_in_javascript.html
+http://developer.51cto.com/art/200907/136245.htm
+http://yehudakatz.com/2011/08/11/understanding-javascript-function-invocation-and-this/

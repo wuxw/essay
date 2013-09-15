@@ -1,0 +1,287 @@
+#The Javascript good parts briefing#
+
+##语法##
+
+###标示符###
+
+标示符由一个字母或者下划线开头，其后可以选择性添加一个或者多个字母、数字或者下划线，Javascript内部有一些保留的标示符。
+
+###数字###
+
+Javascript只有一个单一的数字类型，它在内部被表示为64位的浮点数。Javascript并没有分理处单独的整数类型，因此1和1.0是相同的值。
+
+###字符串###
+
+字符串直接量可以被包含在单引号或者双引号中，可能包含0个或者多个字符。\（反斜线）是转义字符。Javascript中的所有字符都是16位的。另外，Javascript没有字符类型，要表示一个字符，只需要创建一个仅包含一个字符的字符串即可。
+
+###语句###
+
+1.  执行顺序
+
+    Javascript语句按照从上到下的顺序执行。另外值得注意的是，在HTML中的外链脚本，也是按照从上到下的顺序去解析和执行的。
+
+2.  分类
+
+    基本的**条件语句**有if和switch，**循环语句**有while，for和do，**强制跳转语句**有break，return和throw。
+
+    Javascript认为**以下的值为假（falsy）**:
+
+        +   false
+        +   null
+        +   undefined
+        +   空字符串' '
+        +   数字 0
+        +   数字 NaN
+
+    **其他所有值都为真**：包括true，字符串"false"，以及所有对象。
+
+    **for循环语句**是我们常用的循环语句，其常见的形式由三个可选从句控制：初始化语句（initialization）、条件从句（condition）和增量从句（increment）。
+
+    首先initialization将被执行，它的作用通常是初始化循环变量，紧接着计算condition的值，典型情况是完成条件检测循环变量，如果condition被省略则默认返回条件真。如果condition值为假，循环终止。否则执行代码块然后运行increment，接着会循环重复执行condition。
+
+###函数###
+
+有这么三种函数的声明方式：
+
+    // 函数声明
+    function hello() { console.log("Hello"); }
+    
+    // 函数表达式
+    var hello = function() { console.log("Hello"); }
+ 
+    // 带有标示符的函数表达式
+    var hello = function hello() { console.log("Hello"); }
+    
+>NOTE：参阅[Mathias Biilmann](http://mathias-biilmann.net/)的博文[JS: How to Function?](http://mathias-biilmann.net/posts/2013/04/04/js-and-how-to-function)。
+
+>另外，在MDN上，也有这方面的对比[Functions and function scope:constructor vs. function declaration vs. function expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope#Function_constructor_vs._function_declaration_vs._function_expression)
+
+总结一下其实只有两种：**函数表达式**和**函数变量**。
+
+关于函数表达式和函数变量之间的**区别**，简单来说，javascript允许在语句的任何地方以，以表达式方式声明新的函数。在函数声明之前的语句，你是可以访问这个函数的。但如以变量的方式声明新的函数，在执行赋值语句之前，不能正常调用该函数：
+
+    function foo() {
+    
+    	abc();	// this is the output of abc function
+    	
+    	function abc(){ console.log( 'this is the output of abc function' ); };
+    	
+    	var efg = undefined;
+    	
+    	console.log( efg );	// efg is undefined
+    	
+    	efg = function efg(){ console.log( 'this is the output of efg function' ); };
+    	
+    	console.log( efg );	// efg is function efg(){ console.log( 'this is the output of efg function' ); };
+    	
+    };
+
+另外要注意的一点就是，在一般情况下，后面声明的函数，会覆盖前面声明的函数：
+
+    function foo(){
+    	function abc(){ console.log( '1' ); }
+    	function abc(){ console.log( '2' ); }
+    	abc();	// 2
+    }
+
+>NOTE：[kangax](http://perfectionkills.com/)同学有一篇博文详细分析了函数表达式和函数变量之间的区别：[Named function expressions demystified](http://kangax.github.io/nfe/)
+
+###直接量###
+
+在JavaScript中，你可以使用内置的包装对象来声明变量，或者直接使用直接量来声明。相较而言，直接量模式更加简洁、富有表现力，且在定义对象时不容易出错。
+
+对象直接量：
+
+    obj = { propertyName: expression[, ...] } 
+    
+数组直接量：
+
+    array = ["itsy", "bitsy", "spider"];
+    
+正则表达式直接量:
+
+    regexp = /\\/gm;
+    
+>NOTE：淘宝的拔赤同学有一译文[第三章 直接量和构造函数]（https://github.com/lxj/javascript.patterns/blob/master/chapter3.markdown）对此有深入介绍，不妨找来看看。
+
+>说起直接量，之前在阅读周爱民老师的《JavaScript语言精髓与编程实践》时，看到周老师挖掘到许多语法层面的二义性，无事玩玩的话还是挺有趣的。我知道的有这么一些：[方括号"[ ]"的二义性（1）](http://book.51cto.com/art/201204/328510.htm)、[方括号"[ ]"的二义性（2）](http://book.51cto.com/art/201204/328511.htm)、[逗号","的二义性](http://book.51cto.com/art/201204/328509.htm)、[大括号"{ }"的二义性](http://book.51cto.com/art/201204/328508.htm)、[冒号"："与标签的二义性](http://book.51cto.com/art/201204/328507.htm)。
+
+>JavaScript是一门有着丰富表现力的语言，还有很多有意思的地方。
+
+##对象##
+
+###属性访问###
+
+要访问对象属性中包含的值，可以采用在[]后缀中括住一个字符串表达式的方式。如果字符串是一个常数并且是一个合法的Javascript标示符而非保留字，那么用.表示法替代。
+
+    stooge['first-name']    // 'Joe'
+    flight.departure.IATA   //  ''SYD
+    
+如果你尝试访问一个对象并不存在的属性的值的时候，将会返回一个undefined：
+
+    stooge['middle-name']   // undefined
+    flight.status   //  undefined
+    stooge['FIRST-NAME']    // undefined
+    
+|| 运算符可以用来填充默认值：
+
+    var middle = stooge['middle-name'] || '(none)' ;
+    var status = flight.status || 'unknows' ;
+    
+另外，尝试访问undefined的属性值，将会导致TypeError异常：
+
+    flight.equiment // undefined
+    flight.equiment.model // throw TypeError
+    flight.equiment && flight.equiment.model // undefined
+    
+###更新属性值###
+
+直接通过赋值语句进行更新：
+
+    stooge['middle-name'] = ‘Lester’ ;
+    flight.equiment = { model : ' Boeing 777 ' } ;
+    
+###引用###
+
+对象通过引用来传递。
+
+###原型（ prototype ）###
+
+Javascript原型继承以及原型链是一门很深的学问，JavaScript 没有传统的类继承模型，而是使用 prototype 原型模型。
+
+每个对象都链接到一个原型对象，并且对象实例从原型对象继承属性。所有通过直接量创建的对象都会链接到Object.prototype这个Javascript中标准的对象。
+
+>NOTE： prototype其实就是一个标准的Javascript对象
+
+原型也有自己的原型，直到对象的原型为null为止。 这种一级一级的链结构就称为**原型链**。
+
+原型链接在**修改对象**时不起任何作用，只有在**检索值**时才被用到。当查找一个对象的属性时，JavaScript会向上遍历原型链，直到找到给定名称的属性为止，到查找到达原型链的顶部 - 也就是 Object.prototype - 但是仍然没有找到指定的属性，就会返回 undefined。
+
+>NOTE：关于原型继承的原理，Vjeux写了这么一篇文章解释：[Javascript – How Prototypal Inheritance really works](http://blog.vjeux.com/2011/javascript/how-prototypal-inheritance-really-works.html)。另外，我找不到[周爱民](http://blog.csdn.net/aimingoo)老师的那本经典的[《JAVASCRIPT语言精髓与编程实践》](http://product.china-pub.com/38730)的在线版本，不过这本书确实是好书，作者对javascript的研究很深入，值得找来看看。
+
+关于原型继承，有这么一些参考链接，您不妨找来看下，并且手动编写一些代码，以加深理解：
+
++   [浅谈Javascript中的继承和原型链](http://lds2008.blogbus.com/logs/115213441.html)
++   [继承与原型链](https://developer.mozilla.org/zh-CN/docs/JavaScript/Guide/Inheritance_and_the_prototype_chain)
++   [Javascript Object Layout](http://www.mollypages.org/misc/js.mp)
++   [强大的原型和原型链](http://www.cnblogs.com/TomXu/archive/2012/01/05/2305453.html)
+
+>NOTE:  Javascript的原型以及原型的constructor矛盾很多，非常容易引起混乱，建议朵花一点功夫研究。
+
+###反射###
+
+1.  对变量或值调用[typeof](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/typeof)运算符将返回下列值之一：
+
+    ><table>
+    >  <thead>
+    >    <tr>
+    >      <th scope="col">Type</th>
+    >      <th scope="col">Result</th>
+    >    </tr>
+    >  </thead>
+    >  <tbody>
+    >    <tr>
+    >      <td>Undefined</td>
+    >      <td><code>"undefined"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>Null</td>
+    >      <td><code>"object"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>Boolean</td>
+    >      <td><code>"boolean"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>Number</td>
+    >      <td><code>"number"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>String</td>
+    >      <td><code>"string"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>Host object (provided by the JS environment)</td>
+    >      <td><em>Implementation-dependent</em></td>
+    >    </tr>
+    >    <tr>
+    >      <td>Function object (implements [[Call]] in ECMA-262 terms)</td>
+    >      <td><code>"function"</code></td>
+    >    </tr>
+    >    <tr>
+    >      <td>E4X XML object</td>
+    >      <td>"xml"</td>
+    >    </tr>
+    >    <tr>
+    >      <td>E4X XMLList object</td>
+    >      <td>"xml"</td>
+    >    </tr>
+    >    <tr>
+    >      <td>Any other object</td>
+    >      <td><code>"object"</code></td>
+    >    </tr>
+    >  </tbody>
+    ></table>
+
+2.  如果对象实例拥有独有的属性，[hasOwnProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty)方法返回true，否则返回false。
+
+    flight.hasOwnProperty('number');    // true  
+    flight.hasOwnProperty('constructor');    // false
+
+###枚举###
+
+for in语句可以用来遍历一个**对象中所有的属性名**。该枚举过程会列出所有的属性——**包括函数和你可能不关心的原型中的属性**。值得一提的是，for in遍历的时出现的属性名的**顺序是不确定的**。
+
+    for( var prop in stooge ){
+        console.log( prop );
+        console.log( stooge[prop] )
+    }
+
+###删除###
+
+delete运算符可以用来删除对象属性，但是它不会触及对象原型中的任何对象。delete运算符的根本原理其实就是删除对象中不带有**DontDelete属性描述符**的属性。delete运算符仅仅只是删除对象的属性描述符，这个属性指向的对象并没有被释放。更加深入的分析[Understanding delete](http://perfectionkills.com/understanding-delete/)一文有深入的介绍。
+
+##函数(Functions)##
+
+###作用域###
+
+在谈论Javascript的高级主题之一的闭包之前，我们需要先了解Javascript中的作用域。
+
+Javascript有全局作用域，局部作用域（函数作用域）。很多其他的高级语言都有提供的**块级作用域**Javascript并没有支持。
+
+###标示符解析（Identifier Resolution），执行上下文（Execution Contexts）以及作用域链（scope chains）###
+
+1.  [执行上下文（Execution Contexts）](http://davidshariff.com/blog/what-is-the-execution-context-in-javascript/)
+
+    执行上下文是ECMA 262 3rd edition定义的一个Javascript运行时的抽象概念。所有的Javascript都运行在一个特定的执行上下文中：全局代码运行在全局执行上下文中，而每个函数都有关联的执行上下文。执行上下文（Execution Contexts）的详细定义可以参考ECMA 262 (3rd edition)标准的第10.2节。
+    
+    函数调用的时候都会创建一个执行上下文，在创建执行上下文的时候，会按照固定的程序创建一系列对象。
+    
+    首先是[Activation Object](http://dmitrysoshnikov.com/ecmascript/chapter-2-variable-object/)，这是另外一个标准机制，它可以被认为是一个非标准对象（这个对象没有原型，并且不能被JS代码引用）。
+    
+    紧接下来的是arguments对象的创建。arguments对象是一个类似数组的对象，可以使用整数索引去访问这个对象的属性，比如arguments[0]。arguments对象创建完成之后，Activation Object会添加一个arguments属性，该属性指向该对象。
+    
+    然后执行上下文会关联到一个作用域。作用域由一系列对象组成。每个函数对象都有一个[[scope]]的内部属性，
+
+http://jibbering.com/faq/notes/closures/
+
+http://davidshariff.com/blog/javascript-scope-chain-and-closures/
+
+http://www.coachwei.com/2008/09/13/javascript-execution-context-closure-eval-and-this-keyword/
+
+>NOTE: 这里有一个关于[Javascript作用域的测试](http://madebyknight.com/javascript-scope/)，可以测试下自己对Javascript作用域的理解，挺好玩的。
+
+###闭包###
+
+>NOTE：关于this机制，可以参考[阮一峰](http://www.ruanyifeng.com/home.html)写的这篇博文[Javascript的this用法](http://www.ruanyifeng.com/blog/2010/04/using_this_keyword_in_javascript.html)
+
+##数组Array##
+
+参考文档：
+
+1.  [编译原理](http://www.baike.com/wiki/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86)
+2.  [Example of linker and loader?](http://wiki.answers.com/Q/Example_of_linker_and_loader)
+3.  [Linux内存管理](http://www.kerneltravel.net/journal/v/mem.htm)
+4.  [linux进程内存布局](http://mqzhuang.iteye.com/blog/901602)
+5.  [深入理解JavaScript作用域和作用域链](http://developer.51cto.com/art/201109/289286.htm)
+6.  [Learning Advanced JavaScript](http://ejohn.org/apps/learn/)
