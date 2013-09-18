@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+</head>
+<body>
+
+<div id="div2" class="div2">
+    <a id="Level-2-Range-introduction" name="Level-2-Range-introduction"></a>
+
+    <h2 id="Level-2-Range-introduction-h2" class="div2">
+        2.1.
+    Introduction
+    </h2>
+
+    <p>
+        A Range identifies a range of content in a Document,
+    DocumentFragment or Attr. It is contiguous in the sense that it can
+    be characterized as selecting all of the content between a pair of
+    boundary-points.l
+    </p>
+
+    <p> <b>Note:</b>
+        In a text editor or a word processor, a user can
+    make a selection by pressing down the mouse at one point in a
+    document, moving the mouse to another point, and releasing the
+    mouse. The resulting selection is contiguous and consists of the
+    content between the two points.
+    </p>
+
+    <p>
+        The term 'selecting' does not mean that every Range corresponds
+    to a selection made by a GUI user; however, such a selection can be
+    returned to a DOM user as a Range.
+    </p>
+
+    <p id="selecting"><b>Note:</b>
+        In bidirectional writing (Arabic, Hebrew), a range
+    may correspond to a logical selection that is not necessarily
+    contiguous when displayed. A visually contiguous selection, also
+    used in some cases, may not correspond to a single logical
+    selection, and may therefore have to be represented by more than
+    one range.
+    </p>
+
+    <p>
+        The Range interface provides methods for accessing and
+    manipulating the document tree at a higher level than similar
+    methods in the Node interface. The expectation is that each of the
+    methods provided by the Range interface for the insertion, deletion
+    and copying of content can be directly mapped to a series of Node
+    editing operations enabled by DOM Core. In this sense, the Range
+    operations can be viewed as convenience methods that also enable
+    the implementation to optimize common editing patterns.
+    </p>
+
+    <p>
+        This chapter describes the Range interface, including methods
+    for creating and moving a Range and methods for manipulating
+    content with Ranges.
+    </p>
+
+    <p>
+        The interfaces found within this section are not mandatory. A
+    DOM application may use the
+        <code>hasFeature(feature,
+    version)</code>
+        method of the
+        <code>DOMImplementation</code>
+        interface with parameter values "Range" and "2.0" (respectively) to
+    determine whether or not this module is supported by the
+    implementation. In order to fully support this module, an
+    implementation must also support the "Core" feature defined defined
+    in the DOM Level 2 Core specification [
+        <a class="noxref" href="references.html#DOMCore">DOM Level 2 Core</a>
+        ]. Please refer
+    to additional information about
+        <a href="http://www.w3.org/TR/DOM-Level-2-Core/introduction.html#ID-Conformance"> <em>conformance</em>
+        </a>
+        in the DOM Level 2 Core specification [
+        <a class="noxref" href="references.html#DOMCore">
+            DOM Level 2
+    Core
+        </a>
+        ].
+    </p>
+
+</div>
+
+<script type="text/javascript" id="createRange">
+
+    function createRange(){
+        var range = document.createRange();
+        var id = 'Level-2-Range-introduction-h2';
+        var parent = document.getElementById( id );
+
+        range.setStart( parent,0 );
+        range.setEnd( parent,1 );
+        
+        //  2.1. Introduction
+        console.log( range.toString() );
+    };
+
+    console.log( '----------------------------------' );
+
+    createRange();
+
+    console.log( '----------------------------------' );
+
+</script>
+
+<script type="text/javascript" id="selectNode_1">
+
+    function selectNode_1(){
+        var range = document.createRange();
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        range.setStart( start,0 );
+        range.setEnd( end,1 );
+        //range.setEnd( end.childNodes[0],10 );
+
+        console.log( range.toString() );
+    };
+
+    console.log( '----------------------------------selectNode_1' );
+
+    selectNode_1();
+
+    console.log( '----------------------------------selectNode_1' );
+
+</script>
+
+<script type="text/javascript" id="selectNode_2">
+
+    function selectNode_2(){
+
+        var range = document.createRange();
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+
+        console.log( range.toString() );
+
+    };
+
+    console.log( '----------------------------------selectNode_2' );
+
+    selectNode_2();
+
+    console.log( '----------------------------------selectNode_2' );
+
+</script>
+
+<script type="text/javascript" id="selectNode_3">
+
+    function selectNode_3(){
+
+        var range = document.createRange();
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+
+        console.log( 'selectNode' );
+        range.selectNode( end.getElementsByTagName( 'b' )[0] );
+        var nodes = range.cloneContents();
+        console.log( nodes );
+
+        console.log( 'selectNodeContents' );
+        range.selectNodeContents( start );
+        var content = range.cloneContents();
+        console.log( content );
+
+    };
+
+    console.log( '----------------------------------selectNode_3' );
+
+    selectNode_3();
+
+    console.log( '----------------------------------selectNode_3' );
+
+</script>
+
+
+<script type="text/javascript" id="collapse_1">
+
+    function collapse_1(){
+
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        var range = document.createRange();
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+
+        console.log( 'before collapse' );
+
+        console.log( range.toString() );
+
+        console.log( 'collapse && true' );
+
+        range.collapse( true );
+
+        console.log( range.toString() );
+
+    };
+
+    console.log( '----------------------------------collapse_1' );
+
+    collapse_1();
+
+    console.log( '----------------------------------collapse_1' );
+
+</script>
+
+<script type="text/javascript" id="extractContents_1">
+
+    function extractContents_1(){
+
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        var range = document.createRange();
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+        //  select '<h2>2.1.Introduction</h2>'
+        range.selectNodeContents( start );
+        //  delete innerHtml,
+        //  if you open console of chrome and see document,you can still find <h2 id="Level-2-Range-introduction-h2" class="div2"></h2>
+        var nodes = range.extractContents();
+
+        console.log( nodes );
+        
+    };
+
+    console.log( '----------------------------------extractContents_1' );
+
+    extractContents_1();
+
+    console.log( '----------------------------------extractContents_1' );
+
+</script>
+
+<script type="text/javascript" id="deleteContents_1">
+
+    function deleteContents_1(){
+
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        var range = document.createRange();
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+        //  select '<h2>2.1.Introduction</h2>'
+        range.selectNodeContents( start );
+        //  delete innerHtml,
+        //  if you open console of chrome and see document,you can still find <h2 id="Level-2-Range-introduction-h2" class="div2"></h2>
+        range.deleteContents();
+
+    };
+
+    console.log( '----------------------------------deleteContents_1' );
+
+    deleteContents_1();
+
+    console.log( '----------------------------------deleteContents_1' );
+
+</script>
+
+<script type="text/javascript" id="insertNode_1">
+
+    function insertNode_1(){
+
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        var range = document.createRange();
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+        //  select '<h2>2.1.Introduction</h2>'
+        range.selectNodeContents( start );
+        //  delete innerHtml,
+        //  if you open console of chrome and see document,you can still find <h2 id="Level-2-Range-introduction-h2" class="div2"></h2>
+        //  becouse contents of h2 hasBeen delete above, so I don't call deleteContents again here
+        //  range.deleteContents();
+
+        var textNode = document.createTextNode();
+        textNode.textContent = '2.1.Introduction';
+        range.insertNode( textNode );
+
+    };
+
+    console.log( '----------------------------------insertNode_1' );
+
+    insertNode_1();
+
+    console.log( '----------------------------------insertNode_1' );
+
+    //  var div = document.createElement( 'div' )
+
+</script>
+
+<script type="text/javascript" id="surroundContents_1">
+
+    function surroundContents_1(){
+
+        var start = document.getElementById( 'Level-2-Range-introduction-h2' );
+        var end = document.getElementById( 'selecting' );
+        var selectedNode = document.getElementById( 'selecting' );
+
+        var range = document.createRange();
+        range.setStart( start,0 );
+        //  text node in the P element
+        range.setEnd( end.childNodes[1],10 );
+        //  select '<h2>2.1.Introduction</h2>'
+        range.selectNodeContents( start );
+        //  delete innerHtml,
+        //  if you open console of chrome and see document,you can still find <h2 id="Level-2-Range-introduction-h2" class="div2"></h2>
+
+        //var textNode = document.createTextNode();
+        //textNode.textContent = '2.1.Introduction';
+        //range.insertNode( textNode );
+        var span = document.createElement( 'span' );
+        //<h2 id="Level-2-Range-introduction-h2" class="div2"><span>2.1.Introduction</span></h2>
+        range.surroundContents(span);
+
+    };
+
+    console.log( '----------------------------------surroundContents_1' );
+
+    surroundContents_1();
+
+    console.log( '----------------------------------surroundContents_1' );
+
+</script>
+
+</body>
+</html>

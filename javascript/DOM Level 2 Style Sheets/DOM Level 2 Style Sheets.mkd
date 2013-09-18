@@ -14,16 +14,6 @@ StyleSheet用来表示文档外链的样式表，包括通过link标签或者是
 
     var sheets = document.styleSheets;  
     
->NOTE：在火狐下这行代码返回结果正确，可是在chrome下就有问题了，返回结果被截断了。如果使用ID选择器还是能正常访问DOM的相关属性。我想这应该是chrome的一个BUG吧。[点击查看示例页面](http://my.oschina.net/knightuniverse/blog/156649)。
-
->FireFox:
-
->![Alt text](/path/to/img.jpg)
-
->Chrome:
-
->![Alt text](/path/to/img.jpg)
-    
 <table>
 
 <tbody>
