@@ -1,0 +1,3 @@
+到控制面板，把Microsoft SQL Server 2012 express LocalDB 卸载了，问题就搞定了。
+
+>NOTE:微软什么时候能不要这么纠结啊...每次装微软的开发工具都少不了这么折腾...
