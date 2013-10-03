@@ -29,6 +29,8 @@
 
 然后你就可以开始Clone Git Repo了！
 
+![Pull Git Repo](./Snagit.png)
+
 ##参考文档##
 
 1.	[Error "Could not open a connection to your authentication agent"](http://blackboard.myhomepc.in/2010/04/error-could-not-open-connection-to-your.html)
