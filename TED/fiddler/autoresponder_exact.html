@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>AutoResponder</title>
+    <script type="text/javascript" src="jquery-2.0.3.min.js"></script>
+</head>
+<body>
+
+    <h2>AutoResponder--exact match</h2>
+    <script type="text/javascript">
+
+    $.getJSON( 'http://ted.me/fiddler/exact.html',function( serverData ){
+        console.log( 'exact match' )
+        console.log( serverData );
+    } );
+
+    </script>
+
+</body>
+</html>

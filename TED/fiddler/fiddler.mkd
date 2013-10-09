@@ -1,0 +1,42 @@
+##AutoResponder##
+
+官方文档：[AutoResponder Reference](http://www.fiddlerbook.com/Fiddler2/help/AutoResponder.asp)
+
+1.	字符串直接量（String Literals）
+
+**匹配字符串（不区分大小写）**
+
+	strexample
+
+**自动响应结果**
+
+	http://ted.me/fiddler/match_string_response.txt
+
+**javascript代码**
+
+	$.getJSON( 'http://ted.me/fiddler/strexample.html',function( serverData ){
+        console.log( 'AutoResponder match string rule' )
+        console.log( serverData );
+    } );
+
+当然我们还可以在字符串直接量前面添加NOT进行匹配
+
+	NOT:"string to match"
+
+2.	URL精确匹配（Exact Match）
+
+**格式**
+
+	EXACT:http://www.example.com/path
+
+**javascript代码**
+
+	$.getJSON( 'http://ted.me/fiddler/exact.html',function( serverData ){
+        console.log( 'exact match' )
+        console.log( serverData );
+    } );
+
+3.	正则表达式（Regular Expressions）
+
+[正则表达式（RegEx）——快速参考](http://ahkcn.sourceforge.jp/docs/misc/RegEx-QuickRef.htm)
+
