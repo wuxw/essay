@@ -1,14 +1,32 @@
+##What is Fiddler##
+
+Fiddler is a Web Debugging Proxy which logs all HTTP(S) traffic between your computer and the Internet
+
+##How does it work##
+
+![How](./fiddler-proxy.png)
+
+##Basic##
+
+**icons**
+
+![icons in web session](./icons_in_web_session.png)
+
+**Inspectors**
+
+![Inspectors](./Inspectors.png)
+
 ##AutoResponder##
 
 官方文档：[AutoResponder Reference](http://www.fiddlerbook.com/Fiddler2/help/AutoResponder.asp)
 
-1.	字符串直接量（String Literals）
+###1.	字符串直接量（String Literals）###
 
-**匹配字符串（不区分大小写）**
+**示例RULE（规则中的字符串不区分大小写）**
 
 	strexample
 
-**自动响应结果**
+**示例Action**
 
 	http://ted.me/fiddler/match_string_response.txt
 
@@ -23,11 +41,19 @@
 
 	NOT:"string to match"
 
-2.	URL精确匹配（Exact Match）
+###2.	URL精确匹配（Exact Match）###
 
 **格式**
 
 	EXACT:http://www.example.com/path
+
+**示例RULE**
+
+	EXACT:http://ted.me/fiddler/exact.html
+
+**示例Action**
+
+	http://ted.me/fiddler/exact_url_response.txt
 
 **javascript代码**
 
@@ -36,11 +62,62 @@
         console.log( serverData );
     } );
 
-3.	正则表达式（Regular Expressions）
+###3.	正则表达式（Regular Expressions）###
 
-[正则表达式（RegEx）——快速参考](http://ahkcn.sourceforge.jp/docs/misc/RegEx-QuickRef.htm)
+	regex:.+
+
+**示例RULE**
+
+	regex:.+before\.css.*$
+
+**示例Action**
+
+	http://ted.me/fiddler/after.css
+
+![Regular Expressions](./autoresponder_regexp.png)
+
 
 ##Break Point##
 
-[Fiddler In Action - Part 2](http://www.mehdi-khalili.com/fiddler-in-action/part-2)
-[Using QuickExec](http://fiddler2.com/documentation/KnowledgeBase/QuickExec)
+###默认指令###
+
++	?sometext
++	>size
++	<size
++	=status
++	=method
++	@host
++	bpafter
++	bpm
++	bps
++	cls
++	go
++	...
+
+###缘起###
+
+首先看看之前为了调试一个IE浏览器下的CSS样式的BUG：[z-index](../../css/zIndex/zIndex.md)
+
+我接手这个问题的时候，本机并没有任何开发环境以及项目的代码。这个问题虽然不紧急，但是我并不希望在本地搭建一次项目，然后用Visual Studio设一下断点，然后傻乎乎地运行。
+
+于是我思考应该有办法使用Fiddler进行调试。当时我使用了AutoResponder，也就是我不区分任何的URL，都进行断点。然后在IE的开发者工具一步一步调试。
+
+现在才回过头来学习BreakPoint。
+
+>NOTE:
+>
+>现场演示bmp
+>
+>回忆网龙91豆支付的开发过程
+>
+>有这么一张恶搞的图片可以用来炫技:
+>
+>![恶搞的图片](http://www.mehdi-khalili.com/get/BlogPictures/fiddler-in-action-2/hacked-bing.jpg)
+
+##参考文档##
+
+1.	[正则表达式（RegEx）——快速参考](http://ahkcn.sourceforge.jp/docs/misc/RegEx-QuickRef.htm)
+2.	[Fiddler In Action - Part 1](http://www.mehdi-khalili.com/fiddler-in-action/part-1)
+2.	[Fiddler In Action - Part 2](http://www.mehdi-khalili.com/fiddler-in-action/part-2)
+3.	[Using QuickExec](http://fiddler2.com/documentation/KnowledgeBase/QuickExec)
+4.	[User Interface Guide](http://fiddler2.com/documentation/KnowledgeBase/UIGuide)

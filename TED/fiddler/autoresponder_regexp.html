@@ -3,17 +3,18 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>AutoResponder</title>
+    <link href="before.css?v=123" rel="stylesheet" type="text/css" />
     <script type="text/javascript" src="jquery-2.0.3.min.js"></script>
 </head>
 <body>
 
     <h2>AutoResponder--regular expressions</h2>
+    <span id="span1">font-size</span>
     <script type="text/javascript">
 
-    $.getJSON( 'http://ted.me/fiddler/exact.html',function( serverData ){
-        console.log( 'exact match' )
-        console.log( serverData );
-    } );
+    $(function(argument) {
+        console.log( $( '#span1' ).css( 'font-size' ) );
+    });
 
     </script>
 
