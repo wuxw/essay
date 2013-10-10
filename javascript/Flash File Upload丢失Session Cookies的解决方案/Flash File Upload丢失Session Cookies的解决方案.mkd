@@ -1,0 +1,5 @@
+[Flash File Upload and Session Cookies](http://www.visible-form.com/blog/flash-file-upload-and-session-cookies/)
+
+[Fixing Flash Bugs and Intercepting IIS Application Request Routing Cookies](http://improve.dk/fixing-flash-bugs-by-intercepting-iis-application-request-routing-cookies/)
+
+[swfuploader source code](https://code.google.com/p/swfupload/source/browse/swfupload/trunk/samples/demos/applicationdemo.vb.net/Default.aspx?r=850)

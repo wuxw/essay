@@ -40,3 +40,7 @@
 
 [正则表达式（RegEx）——快速参考](http://ahkcn.sourceforge.jp/docs/misc/RegEx-QuickRef.htm)
 
+##Break Point##
+
+[Fiddler In Action - Part 2](http://www.mehdi-khalili.com/fiddler-in-action/part-2)
+[Using QuickExec](http://fiddler2.com/documentation/KnowledgeBase/QuickExec)
