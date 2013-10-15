@@ -1,0 +1,192 @@
+##grunt是什么？##
+
+grunt是一个基于nodejs的task runner，简单来说，就是类似于.net平台的msbuild以及java平台的maven。
+
+##grunt能做什么？##
+
+grunt可以使你的项目中重复的任务，比如压缩，语法检查，编译（比如LESS预处理，coffeescript编译），单元测试等变得更加简单。
+
+##安装##
+
+因为grunt是基于node.js的，所以我们首先要安装node.js以及node.js的包管理工具npm。
+
+windows 平台下只要在[NODE.JS官方](http://nodejs.org/)下载MSI安装包，直接安装，node.js以及npm就能直接装好。
+
+Linux平台下，因为一些发行版软件源的node.js版本想对比较低，grunt 0.4又要求node.js的版本要>=0.8.0，因此我推荐编译安装。
+
+安装完成node.js以后，就可以开始安装npm，grunt以及grunt-cli了。
+
+	sudo apt-get -y install npm
+	sudo npm install -g grunt
+	sudo npm install -g grunt-cli
+
+##Getting started##
+
+###配置文件###
+
+grunt需要两个配置文件：Gruntfile.js以及package.json。
+
+**Gruntfile.js**
+
+Gruntfile.js要放在项目的**根文件夹**下，用于配置grunt要运行的任务：
+	
+	module.exports = function( grunt ) {
+		grunt.initConfig({
+		  pkg: grunt.file.readJSON('package.json'),
+		  uglify: {
+		    options: {
+		      banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+		    },
+		    build: {
+		      src: 'src/<%= pkg.name %>.js',
+		      dest: 'build/<%= pkg.name %>.min.js'
+		    }
+		  }
+		});
+		grunt.loadNpmTasks('grunt-jsdoc');
+	}
+
+>NOTE：
+>
+>通过<%%>模板字符串可以引用任何的配置属性，比如<%=pkg.name%>
+>
+>通过grunt提供的API方法loadNpmTasks，我们可以加载grunt的插件
+
+	grunt.loadNpmTasks('grunt-jsdoc');
+
+**package.json**
+
+package.json用来存放**项目的元数据**，比如项目的版本，项目许可证书——比如MIT，GPL啥的，作者，项目依赖的库等：
+
+	{
+	  "name": "ui",
+	  "version": "1.0.0",
+	  "description": "",
+	  "main": "ui.min.js",
+	  "directories": {
+	    "doc": "doc"
+	  },
+	  "scripts": {
+	    "test": "echo \"Error: no test specified\" && exit 1"
+	  },
+	  "repository": "",
+	  "keywords": [
+	    "javascript",
+	    "ui",
+	    ""
+	  ],
+	  "author": "",
+	  "license": "BSD",
+	  "devDependencies": {
+	    "grunt": "~0.4.1",
+	    "grunt-jsdoc": "~0.4.0",
+	    "grunt-contrib-copy": "~0.4.1"
+	  }
+	}
+
+当你准备开始使用grunt去做一个新项目的时候，你可以使用**npm init**来创建一个基本的package.json文件。
+
+###grunt的任务###
+
+Grunt就只支持两种任务，分别是基本的Task以及MultiTasks。这两者的区别是：Basic Task的任务配置只有一个，而MultiTasks的任务配置则有多个。
+
+默认情况下，如果**没有指定**MultiTasks要使用的目标配置，那么实际执行任务的时候，grunt会加载并且执行所有的任务配置。大多数的grunt插件任务都是MultiTasks。
+
+我们以[grunt-jsdoc](https://npmjs.org/package/grunt-jsdoc)插件作为例子，实际观察一下MultiTasks的运行：
+
+	// grunt-jsdoc插件的任务配置
+	jsdoc: {
+	    dev : {
+	        src: jsdoc_src, 
+	        options: {
+	            template : 'templates/ebaui',
+	            private    : false,
+	            destination: 'build/doc/',
+	            tutorials  : 'build/demo/'
+	        }
+	    },
+	    release : {
+	        src: jsdoc_src, 
+	        options: {
+	            template : '',
+	            private    : false, 
+	            destination: '../release/<%=pkg.version%>/doc/',
+	            tutorials  : 'build/demo/'
+	        }
+	    }
+	}
+
+**没有指定任务的目标配置**
+
+运行任务：
+
+	grunt jsdoc
+
+在console里会输出如下结果：
+
+	Running "jsdoc:dev" (jsdoc) task
+	Documentation generated to E:\mygit\eba.ui\trunk\build\doc
+	Running "jsdoc:release" (jsdoc) task
+	Documentation generated to E:\mygit\eba.ui\release\1.0.0\doc
+	Done, without errors.
+
+**指定任务的目标配置**
+
+运行任务：
+
+	grunt jsdoc:dev
+
+在console里会输出如下结果：
+
+	Running "jsdoc:dev" (jsdoc) task
+	Documentation generated to E:\mygit\eba.ui\trunk\build\doc
+	Done, without errors.
+
+###编写grunt任务###
+
+grunt全局命名空间下，提供了以下两个和定义任务有关的API：
+	
+	//	Alias task
+	grunt.registerTask(taskName, taskList)
+	//	Function task
+	grunt.registerTask(taskName, description, taskFunction)
+	//	multi task
+	grunt.registerMultiTask(taskName, description, taskFunction)
+
+**registerTask**
+
+	// Default task(s).
+    var defaultTasks = [
+        'build_js:dev',
+        'build_themes:dev',
+        'copy:dev',
+        'build_template:dev'
+    ];
+    grunt.registerTask('default', defaultTasks);
+
+**registerMultiTask**
+	
+	grunt.registerMultiTask('cp_phpdemo','',function(){
+        log( ' task ' + this.target + ' start......' );
+        var config   = this.data;
+        var source   = grunt.file.expand( this.data.src );
+        var dest     = this.data.dest;
+        if( source && source.length > 0 ){
+
+            source.forEach( function( item ) {
+                var filename = path.basename( item );
+                copyfile( item, dest+filename );
+            } );
+
+        }
+        log( ' task ' + this.target + ' end......' );
+    });
+
+###运行grunt任务###
+	
+	//	默认执行default任务
+	grunt
+	//	加载jsdoc所有任务配置，并且以每个配置去执行jsdoc任务
+	grunt jsdoc
+	//	指定使用dev的任务配置，并且以这个配置去执行jsdoc任务
+	grunt jsdoc:dev
