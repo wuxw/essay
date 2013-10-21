@@ -1,0 +1,24 @@
+##Document mode##
+
+Document compatibility defines how Windows Internet Explorer renders your webpages. Like other popular browsers, Windows Internet Explorer supports document compatibility modes that **affect the way webpages are interpreted and displayed**. These modes, also called document modes, allow you to choose between support for the latest standard or support for certain behaviors popularized by older browsers.
+
+All versions of Internet Explorer released after Internet Explorer 6 support up to three document modes:
+
++	Standards mode provides the greatest support for the latest standards, such as HTML5, CSS3, SVG, and others. This is the preferred mode for new public websites.
++	Quirks mode emphasizes compatibility over standards compliance by supporting behavior found in earlier versions of Internet Explorer.
++	Almost-standards mode supports APIs defined by the latest standards while honoring graphic rendering behavior found in earlier browsers.
+
+>NOTE:
+>
+>As of Internet Explorer 10, quirks mode behaves differently than it did in earlier versions of the browser. In Windows Internet Explorer 9 and earlier versions, quirks mode restricted the webpage to the features supported by Microsoft Internet Explorer 5.5. In Internet Explorer 10, quirks mode conforms to the differences specified in the HTML5 specification. For more info, see Specifying legacy document modes.
+
+##Browser mode##
+
+Browser Mode sets how the browser **identifies itself to the web server and to JavaScript**.
+
+##参考文档##
+
+1.	[Defining document compatibility](http://msdn.microsoft.com/en-us/library/cc288325%28VS.85%29.aspx#Content)
+2.	[What's the difference if <meta http-equiv=“X-UA-Compatible” content=“IE=edge”> exists or not?](http://stackoverflow.com/questions/6771258/whats-the-difference-if-meta-http-equiv-x-ua-compatible-content-ie-edge-e)
+3.	[Testing sites with Browser Mode vs. Doc Mode](http://blogs.msdn.com/b/ie/archive/2010/10/19/testing-sites-with-browser-mode-vs-doc-mode.aspx)
+4.	[IE’s Compatibility Features for Site Developers](http://blogs.msdn.com/b/ie/archive/2010/06/16/ie-s-compatibility-features-for-site-developers.aspx?Redirected=true)

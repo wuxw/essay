@@ -1,0 +1,5 @@
+##Standalone Debugging Tools for Windows 8.1(WinDbg)##
+
+[Windows 8.1: Download kits and tools](http://msdn.microsoft.com/en-us/windows/hardware/gg454513.aspx)
+
+[](http://msdn.microsoft.com/en-us/library/windows/hardware/ff551063(v=vs.85).aspx)
