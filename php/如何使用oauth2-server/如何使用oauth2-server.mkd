@@ -1,0 +1,38 @@
+##依赖技能##
+
+PHP Composer包管理器：[【译】What is PHP Composer](../【译】What is PHP Composer/【译】What is PHP Composer.mkd)
+
+##create mysql data tables##
+
+\application\libraries\OAuth2\Server\create_mysql_data_tables.sql
+
+##create first client##
+
+In OAuth terms a client is an application (it could be a website or a mobile app) that communicates with your API.
+
+Insert a client into the **oauth_clients** table.
+
+use this [randomkeygen](http://randomkeygen.com/) to get a **client\_id** && **client\_secret**
+
+>NOTE:
+>	The **auto_approve** parameter should be to 1 if you want the user to automatically approve access to the client, otherwise set it to 0.
+
+##create the storage models##
+
+depends on other php lib : [zeta components](http://zetacomponents.org/documentation/trunk/Database/tutorial.html)
+
+##todo-list##
+
+学习使用PHP Composer
+
+mysql 建表
+引入zetacomponents/database
+编写一个Context，包含一个authenticate方法验证请求
+
+##参考文档##
+
+1.	[OAuth 2.0的机制原理讲解及开发流程[OAuth开发]](http://blog.unvs.cn/archives/oauth-qq2.0-developer.html)
+2.	[Authentication using OAuth 2.0 - Server and Client Flows](https://community.constantcontact.com/t5/Documentation/Authentication-using-OAuth-2-0-Server-and-Client-Flows/ba-p/38313)
+3.	[github issue](https://github.com/php-loep/oauth2-server/issues/72)
+4.	[](https://github.com/php-loep/oauth2-server/issues/105)
+5.	[CODEIGNITER SERIES: THIRD PARTY LIBRARY INTEGRATION](http://tenfastfeet.com/interact/blog-archive/39-blog/231-codeigniter-series-third-party-library-integration-)
