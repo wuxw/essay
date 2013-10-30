@@ -1,0 +1,7 @@
+跨域
+
+现成的一个库是easyXDM
+
+http://www.alloyteam.com/2012/08/lightweight-solution-for-an-iframe-cross-domain-communication/
+http://www.alloyteam.com/2012/11/html5-cors/
+http://www.woiweb.net/10-cross-domain-methods.html
