@@ -1,0 +1,167 @@
+[OAuth的机制原理讲解及开发流程](http://kb.cnblogs.com/page/189153/)
+
+[【QQ登录】签名参数oauth_signature的说明](http://wiki.opensns.qq.com/wiki/%E3%80%90QQ%E7%99%BB%E5%BD%95%E3%80%91%E7%AD%BE%E5%90%8D%E5%8F%82%E6%95%B0oauth_signature%E7%9A%84%E8%AF%B4%E6%98%8E)
+[Client Credentials授权](http://developer.baidu.com/wiki/index.php?title=docs/oauth/client)
+[OAuth介绍](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
+
+authorization information.  Unlike access tokens, refresh tokens are
+   intended for use only with authorization servers and are never sent
+   to resource servers.
+
+  +--------+                                           +---------------+
+  |        |--(A)------- Authorization Grant --------->|               |
+  |        |                                           |               |
+  |        |<-(B)----------- Access Token -------------|               |
+  |        |               & Refresh Token             |               |
+  |        |                                           |               |
+  |        |                            +----------+   |               |
+  |        |--(C)---- Access Token ---->|          |   |               |
+  |        |                            |          |   |               |
+  |        |<-(D)- Protected Resource --| Resource |   | Authorization |
+  | Client |                            |  Server  |   |     Server    |
+  |        |--(E)---- Access Token ---->|          |   |               |
+  |        |                            |          |   |               |
+  |        |<-(F)- Invalid Token Error -|          |   |               |
+  |        |                            +----------+   |               |
+  |        |                                           |               |
+  |        |--(G)----------- Refresh Token ----------->|               |
+  |        |                                           |               |
+  |        |<-(H)----------- Access Token -------------|               |
+  +--------+           & Optional Refresh Token        +---------------+
+
+               Figure 2: Refreshing an Expired Access Token
+
+   The flow illustrated in Figure 2 includes the following steps:
+
+   (A)  The client requests an access token by authenticating with the
+        authorization server and presenting an authorization grant.
+
+   (B)  The authorization server authenticates the client and validates
+        the authorization grant, and if valid, issues an access token
+        and a refresh token.
+
+   (C)  The client makes a protected resource request to the resource
+        server by presenting the access token.
+
+   (D)  The resource server validates the access token, and if valid,
+        serves the request.
+
+   (E)  Steps (C) and (D) repeat until the access token expires.  If the
+        client knows the access token expired, it skips to step (G);
+        otherwise, it makes another protected resource request.
+
+   (F)  Since the access token is invalid, the resource server returns
+        an invalid token error.
+
+   (G)  The client requests a new access token by authenticating with
+        the authorization server and presenting the refresh token.  The
+        client authentication requirements are based on the client type
+        and on the authorization server policies.
+
+   (H)  The authorization server authenticates the client and validates
+        the refresh token, and if valid, issues a new access token (and,
+        optionally, a new refresh token).
+
+   Steps (C), (D), (E), and (F) are outside the scope of this
+   specification, as described in Section 7.
+>NOTE:
+>	整理了一下，也就是说，当Resource Server跑出一个Invalid Token Error异常的时候，Client就要再次跳转去Authorization Server请求授权。
+
+Client Types
+
+   confidential
+      Clients capable of maintaining the confidentiality of their
+      credentials (e.g., client implemented on a secure server with
+      restricted access to the client credentials), or capable of secure
+      client authentication using other means.
+
+   public
+      Clients incapable of maintaining the confidentiality of their
+      credentials (e.g., clients executing on the device used by the
+      resource owner, such as an installed native application or a web
+      browser-based application), and incapable of secure client
+      authentication via any other means.
+
+>NOTE:**The authorization server SHOULD NOT make assumptions about the client type.**
+
+##Authorization Code Grant##
+
+     +----------+
+     | Resource |
+     |   Owner  |
+     |          |
+     +----------+
+          ^
+          |
+         (B)
+     +----|-----+          Client Identifier      +---------------+
+     |         -+----(A)-- & Redirection URI ---->|               |
+     |  User-   |                                 | Authorization |
+     |  Agent  -+----(B)-- User authenticates --->|     Server    |
+     |          |                                 |               |
+     |         -+----(C)-- Authorization Code ---<|               |
+     +-|----|---+                                 +---------------+
+       |    |                                         ^      v
+      (A)  (C)                                        |      |
+       |    |                                         |      |
+       ^    v                                         |      |
+     +---------+                                      |      |
+     |         |>---(D)-- Authorization Code ---------'      |
+     |  Client |          & Redirection URI                  |
+     |         |                                             |
+     |         |<---(E)----- Access Token -------------------'
+     +---------+       (w/ Optional Refresh Token)
+
+   Note: The lines illustrating steps (A), (B), and (C) are broken into
+   two parts as they pass through the user-agent.
+
+                     Figure 3: Authorization Code Flow
+
+   grant_type
+         REQUIRED.  Value MUST be set to "authorization_code".
+
+   code
+         REQUIRED.  The authorization code received from the
+         authorization server.
+
+   redirect_uri
+         REQUIRED, if the "redirect_uri" parameter was included in the
+         authorization request as described in Section 4.1.1, and their
+         values MUST be identical.
+
+   client_id
+         REQUIRED, if the client is not authenticating with the
+         authorization server as described in Section 3.2.1.
+
+   For example, the client makes the following HTTP request using TLS
+   (with extra line breaks for display purposes only):
+
+     POST /token HTTP/1.1
+     Host: server.example.com
+     Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+     Content-Type: application/x-www-form-urlencoded
+
+     grant_type=authorization_code&code=SplxlOBeZQQYbYS6WxSbIA
+     &redirect_uri=https%3A%2F%2Fclient%2Eexample%2Ecom%2Fcb
+
+   Access Token Response
+
+   An example successful response:
+
+     HTTP/1.1 200 OK
+     Content-Type: application/json;charset=UTF-8
+     Cache-Control: no-store
+     Pragma: no-cache
+
+     {
+       "access_token":"2YotnFZFEjr1zCsicMWpAA",
+       "token_type":"example",
+       "expires_in":3600,
+       "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+       "example_parameter":"example_value"
+     }
+
+##Implicit Grant##
+
+##Resource Owner Password Credentials Grant##
+

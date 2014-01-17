@@ -1,0 +1,6 @@
+原文地址：[Composer with CodeIgniter](http://philsturgeon.co.uk/blog/2012/05/composer-with-codeigniter)
+
+##参考文档##
+
+1.	[PHP函数spl_autoload_register用法和__autoload](http://www.chhua.com/web-note2595)
+2.	[PHP Database Access: Are You Doing It Correctly?](http://net.tutsplus.com/tutorials/php/php-database-access-are-you-doing-it-correctly/)
