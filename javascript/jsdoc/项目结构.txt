@@ -9,7 +9,7 @@
  |--templates           --      jsdoc文档模板
  |--test                --      jsdoc项目的单元测试
     cli.js              --      
-    conf.json.EXAMPLE   --      
+    conf.json.EXAMPLE   --      jsdoc的运行时配置
     Gruntfile.js        --      grunt配置脚本
     jsdoc               --      bash脚本
     jsdoc.cmd           --      windows bat批处理脚本
